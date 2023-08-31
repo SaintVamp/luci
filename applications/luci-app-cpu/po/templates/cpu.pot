@@ -1,0 +1,32 @@
+msgid ""
+msgstr "Content-Type: text/plain; charset=UTF-8"
+
+msgid "CPU Info"
+msgstr ""
+
+msgid "Ethernet Information"
+msgstr ""
+
+msgid "Ethernet Name"
+msgstr ""
+
+msgid "Link Status"
+msgstr ""
+
+msgid "Speed"
+msgstr ""
+
+msgid "Duplex"
+msgstr ""
+
+msgid "Link Up"
+msgstr ""
+
+msgid "Link Down"
+msgstr ""
+
+msgid "Full Duplex"
+msgstr ""
+
+msgid "Half Duplex"
+msgstr ""

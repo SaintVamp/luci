@@ -1,0 +1,10 @@
+{
+	"luci-app-cpu": {
+		"description": "Grant access to cpu procedures",
+		"read": {
+			"ubus": {
+				"luci.cpu": [ "getETHInfo" , "getCPUInfo"]
+			}
+		}
+	}
+}
