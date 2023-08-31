@@ -14,7 +14,9 @@ config extern flash_keep
 	option uploads	"/lib/uci/upload/"
 	
 config internal languages
-	
+	option zh_cn chinese //新增
+    option en English //新增
+
 config internal sauth
 	option sessionpath "/tmp/luci-sessions"
 	option sessiontime 3600
