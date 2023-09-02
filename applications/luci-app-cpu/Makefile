@@ -6,7 +6,7 @@
 
 include $(TOPDIR)/rules.mk
 
-LUCI_TITLE:=Universal Plug & Play configuration module
+LUCI_TITLE:=CPU Info
 LUCI_DEPENDS:=+ethtool +sensors
 
 include ../../luci.mk
