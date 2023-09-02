@@ -7,7 +7,7 @@
 include $(TOPDIR)/rules.mk
 
 LUCI_TITLE:=CPU Info
-LUCI_DEPENDS:=+ethtool +sensors
+LUCI_DEPENDS:=+ethtool +lm-sensors
 
 include ../../luci.mk
 
