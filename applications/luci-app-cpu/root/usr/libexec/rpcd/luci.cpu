@@ -8,9 +8,18 @@ local methods = {
 	getCPUInfo = {
 		call = function()
 			local rv = {}
-			rv.cpufreq  = tostring(tonumber(sys.exec("cat /sys/devices/system/cpu/cpu0/cpufreq/cpuinfo_cur_freq"))/1000)
-			rv.cputemp  = string.gsub(sys.exec("sensors | grep 'temp' | cut -c16-22"), "^[%s\n\r\t]*(.-)[%s\n\r\t]*$", "%1")
-			return rv
+			local cpu_temp = string.gsub(sys.exec("sensors | grep 'temp' | cut -c16-22"), "^[%s\n\r\t]*(.-)[%s\n\r\t]*$", "%1")
+			local cpu_freqs =sys.exec("cat /sys/devices/system/cpu/cpu*/cpufreq/cpuinfo_cur_freq")
+			cpu_freqs=string.sub(cpu_freqs, 1, -2)
+            a_cpu_freqs = string.split(cpu_freqs , "\n")
+            for i, v in pairs(a_cpu_freqs)  do
+                rv[#rv+1] = {
+                    core = i,
+                    freq = tostring(tonumber(v)/1000) .. "MHz",
+                    temp = cpu_temp
+                }
+            end
+			return { coreinfo = rv}
 		end
 	},
 
