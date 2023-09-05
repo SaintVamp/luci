@@ -1,63 +1,22 @@
--- Copyright 2020 Rafał Wabik (IceG) - From eko.one.pl forum
--- Licensed to the GNU General Public License v3.0.
+-- Copyright 2020 Lienol <lawlienol@gmail.com>
 
-
-	local util = require "luci.util"
-	local fs = require "nixio.fs"
-	local sys = require "luci.sys"
-	local http = require "luci.http"
-	local dispatcher = require "luci.dispatcher"
-	local http = require "luci.http"
-	local sys = require "luci.sys"
-	local uci = require "luci.model.uci".cursor()
-
-module("luci.controller.modem.atc", package.seeall)
+module("luci.controller.socat", package.seeall)
 
 function index()
-	entry({"admin", "modem"}, firstchild(), "Modem", 30).dependent=false
-	entry({"admin", "modem", "atc"}, alias("admin", "modem", "atc", "atcommand"), translate("AT Commands"), 10).acl_depends={ "luci-app-socat" }
- 	entry({"admin", "modem", "atc", "atcommand"},template("modem/atcommand"),translate("AT Commands"), 10)
-	entry({"admin", "modem", "atc", "atconfig"},cbi("modem/atconfig"),translate("Configuration"), 20)
-	entry({"admin", "modem", "webcmd"}, call("webcmd"))
-	entry({"admin", "modem", "atc", "user_atc"}, call("useratc"), nil).leaf = true
-
-end
-
-
-function webcmd()
-    local cmd = http.formvalue("cmd")
-    if cmd then
-	    local at = io.popen("/usr/bin/luci-app-socat " ..cmd:gsub("[$]", "\\\$"):gsub("\"", "\\\"").." 2>&1")
-	    local result =  at:read("*a")
-	    at:close()
-        http.write(tostring(result))
-    else
-        http.write_json(http.formvalue())
-    end
-end
-
-function uussd(rv)
-	local c = nixio.fs.access("/etc/config/atsocat.user") and
-		io.popen("cat /etc/config/atsocat.user")
-
-	if c then
-		for l in c:lines() do
-			local i = l
-			if i then
-				rv[#rv + 1] = {
-					usd = i
-				}
-			end
-		end
-		c:close()
+	if not nixio.fs.access("/etc/config/socat") then
+		return
 	end
+
+	entry({"admin", "network", "socat"}, alias("admin", "network", "socat", "index"), _("Socat"), 100).dependent = true
+	entry({"admin", "network", "socat", "index"}, cbi("socat/index")).leaf = true
+	entry({"admin", "network", "socat", "config"}, cbi("socat/config")).leaf = true
+	entry({"admin", "network", "socat", "status"}, call("act_status")).leaf = true
 end
 
-
-
-function useratc()
-	local usd = { }
-	uussd(usd)
+function act_status()
+	local e = {}
+	e.index = luci.http.formvalue("index")
+	e.status = luci.sys.call(string.format("ps -w | grep -v 'grep' | grep '/var/etc/socat/%s' >/dev/null", luci.http.formvalue("id"))) == 0
 	luci.http.prepare_content("application/json")
-	luci.http.write_json(usd)
+	luci.http.write_json(e)
 end

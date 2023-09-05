@@ -1,18 +1,24 @@
-include $(TOPDIR)/rules.mk
-	
-LUCI_TITLE:=Web UI for socat
-LUCI_DEPENDS:=+socat +luci-compat
-PKG_VERSION:=1.1-2021-10-30
-PKG_LICENSE:=GPLv3
+# Copyright (C) 2020 Lienol <lawlienol@gmail.com>
+#
+# This is free software, licensed under the GNU General Public License v3.
+#
 
-define Package/luci-app-socat/postinst
-#!/bin/sh
-rm -rf /tmp/luci-indexcache
-rm -rf /tmp/luci-modulecache/
-/sbin/set_at_port.sh
-exit 0
+include $(TOPDIR)/rules.mk
+
+PKG_NAME:=luci-app-socat
+PKG_VERSION:=20200824
+PKG_RELEASE:=5
+
+PKG_MAINTAINER:=Lienol <lawlienol@gmail.com>
+
+LUCI_TITLE:=LuCI support for Socat
+LUCI_DEPENDS:=+socat
+LUCI_PKGARCH:=all
+
+define Package/$(PKG_NAME)/conffiles
+/etc/config/socat
 endef
-	
-include $(TOPDIR)/feeds/luci/luci.mk
-	
+
+include ../../luci.mk
+
 # call BuildPackage - OpenWrt buildroot signature
