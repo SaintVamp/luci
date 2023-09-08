@@ -1,5 +1,5 @@
 config core main
-	option lang zh_cn
+	option lang auto
 	option mediaurlbase /luci-static/bootstrap
 	option resourcebase /luci-static/resources
 	option ubuspath /ubus/
@@ -14,8 +14,6 @@ config extern flash_keep
 	option uploads	"/lib/uci/upload/"
 	
 config internal languages
-	option zh_cn chinese //新增
-    option en English //新增
 
 config internal sauth
 	option sessionpath "/tmp/luci-sessions"
