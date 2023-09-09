@@ -47,26 +47,26 @@ o:depends("protocol", "port_forwards")
 
 dest_ipv4 = s:option(Value, "dest_ipv4", translate("Destination address"))
 luci.sys.net.ipv4_hints(function(ip, name)
-    dest_ipv4:value(ip, "%s (%s)" %{ ip, name })
+	dest_ipv4:value(ip, "%s (%s)" %{ ip, name })
 end)
 function dest_ipv4.cfgvalue(self, section)
-    return m:get(section, "dest_ip")
+	return m:get(section, "dest_ip")
 end
 function dest_ipv4.write(self, section, value)
-    m:set(section, "dest_ip", value)
+	m:set(section, "dest_ip", value)
 end
 dest_ipv4:depends("dest_proto", "tcp4")
 dest_ipv4:depends("dest_proto", "udp4")
 
 dest_ipv6 = s:option(Value, "dest_ipv6", translate("Destination address"))
 luci.sys.net.ipv6_hints(function(ip, name)
-    dest_ipv6:value(ip, "%s (%s)" %{ ip, name })
+	dest_ipv6:value(ip, "%s (%s)" %{ ip, name })
 end)
 function dest_ipv6.cfgvalue(self, section)
-    return m:get(section, "dest_ip")
+	return m:get(section, "dest_ip")
 end
 function dest_ipv6.write(self, section, value)
-    m:set(section, "dest_ip", value)
+	m:set(section, "dest_ip", value)
 end
 dest_ipv6:depends("dest_proto", "tcp6")
 dest_ipv6:depends("dest_proto", "udp6")

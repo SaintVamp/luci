@@ -1,6 +1,5 @@
 #!/bin/sh
-# Copyright 2020-2021 Rafał Wabik (IceG) - From eko.one.pl forum
-# Licensed to the GNU General Public License v3.0.
+
 uci -q batch <<-EOF >/dev/null
 	delete firewall.socat
 	set firewall.socat=include
@@ -12,26 +11,9 @@ EOF
 uci -q batch <<-EOF >/dev/null
 	delete ucitrack.@socat[-1]
 	add ucitrack socat
-	set ucitrack.@socat[-1].init=luci_socat
+	set ucitrack.@socat[-1].init=socat
 	commit ucitrack
 EOF
 
 rm -rf /tmp/luci-*cache
-
-work=false
-for port in /dev/ttyUSB*
-do
-    [[ -e $port ]] || continue
-    gcom -d $port info &> /tmp/testusb
-    testUSB=`cat /tmp/testusb | grep "Error\|Can't"`
-    if [ -z "$testUSB" ]; then 
-        work=$port
-        break
-    fi
-done
-rm -rf /tmp/testusb
-
-if [ $work != false ]; then
-uci set socat.http.atcport=$work
-uci commit socat
-fi
+exit 0

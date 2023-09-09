@@ -1,9 +1,7 @@
 local d = require "luci.dispatcher"
 local e = luci.model.uci.cursor()
 
-m = Map("socat")
-m.title = translate("Socat")
-m.description = translate("Socat is a versatile networking tool named after 'Socket CAT', which can be regarded as an N-fold enhanced version of NetCat")
+m = Map("socat", translate("Socat"), translate("Socat is a versatile networking tool named after 'Socket CAT', which can be regarded as an N-fold enhanced version of NetCat"))
 
 s = m:section(NamedSection, "global", "global")
 s.anonymous = true
@@ -74,5 +72,4 @@ o.default = "1"
 o.rmempty = false
 
 m:append(Template("socat/list_status"))
-
 return m
