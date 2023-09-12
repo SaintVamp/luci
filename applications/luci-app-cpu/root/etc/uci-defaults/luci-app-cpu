@@ -1,0 +1,6 @@
+#!/bin/sh
+
+
+chmod +x /usr/libexec/rpcd/luci.cpu
+
+exit 0
