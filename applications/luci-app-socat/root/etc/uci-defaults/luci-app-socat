@@ -11,10 +11,10 @@ EOF
 uci -q batch <<-EOF >/dev/null
 	delete ucitrack.@socat[-1]
 	add ucitrack socat
-	set ucitrack.@socat[-1].init=luci_socat
+	set ucitrack.@socat[-1].init=SocatUI
 	commit ucitrack
 EOF
 
-chmod +x /etc/init.d/luci_socat
+chmod +x /etc/init.d/SocatUI
 rm -rf /tmp/luci-*cache
 exit 0
