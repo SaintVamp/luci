@@ -1,0 +1,13 @@
+{
+	"admin/services/aliddns": {
+		"title": "AliDdns",
+		"action": {
+			"type": "view",
+			"path": "aliddns/aliddns"
+		},
+		"depends": {
+			"acl": [ "luci-app-aliddns" ],
+			"uci": { "aliddns": true }
+		}
+	}
+}

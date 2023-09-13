@@ -1,5 +1,5 @@
 #!/bin/sh
 
-crontab /usr/ddns/cronfile
+#crontab /usr/ddns/cronfile
 
 return 0

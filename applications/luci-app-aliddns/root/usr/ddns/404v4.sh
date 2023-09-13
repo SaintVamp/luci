@@ -13,7 +13,7 @@ set -e
 #
 # 方法1. 外部参数
 # 修改源码，将对应参数 修改为$1,$2,$3,$4,$5,$6
-# aliddns.sh <aak> <ask> <aliddns_subdomain> <aliddns_domain> <aliddns_iptype> <aliddns_ttl>
+# aliddns.sh <AccessKeyId> <AccessKeySecret> <aliddns_subdomain> <aliddns_domain> <aliddns_iptype> <aliddns_ttl>
 # 示例（A 代表 IPv4，AAAA 代表 IPv6）:
 # 执行：aliddns.sh "xxxx" "xxx" "test" "mydomain.site" "A" 600
 # 执行：aliddns.sh "xxxx" "xxx" "test" "mydomain.site" "AAAA" 600
@@ -22,8 +22,8 @@ set -e
 # 修改源码，将$1,$2,$3,$4,$5,$6 替换为对应参数
 #
 # 示例:
-# aak="xxxx"
-# ask="xxx"
+# AccessKeyId="xxxx"
+# AccessKeySecret="xxx"
 # aliddns_subdomain="test"
 # aliddns_domain="mydomain.site"
 # aliddns_iptype="A"
@@ -36,9 +36,11 @@ set -e
 # 参数
 #
 # (*)阿里云 AccessKeyId
-aak=`echo 'TFRBSTV0UThDb2pQRWMxaWh0eUx5cEhoCg==' | base64 -d`
+#AccessKeyId=`echo 'TFRBSTV0UThDb2pQRWMxaWh0eUx5cEhoCg==' | base64 -d`
+AccessKeyId=$1
 # (*)阿里云 AccessKeySecret
-ask=`echo 'cnpWUDZjWGw5RzRVQjQ2YjZRSGNiNlBjQk1rd24yCg==' | base64 -d`
+#AccessKeySecret=`echo 'cnpWUDZjWGw5RzRVQjQ2YjZRSGNiNlBjQk1rd24yCg==' | base64 -d`
+AccessKeySecret=$2
 
 
 
@@ -151,8 +153,8 @@ function enc() {
     echo -n "$1" | urlencode
 }
 function send_request() {
-    local args="AccessKeyId=$aak&Action=$1&Format=json&$2&Version=2015-01-09"
-    local hash=$(echo -n "GET&%2F&$(enc "$args")" | openssl dgst -sha1 -hmac "$ask&" -binary | openssl base64)
+    local args="AccessKeyId=$AccessKeyId&Action=$1&Format=json&$2&Version=2015-01-09"
+    local hash=$(echo -n "GET&%2F&$(enc "$args")" | openssl dgst -sha1 -hmac "$AccessKeySecret&" -binary | openssl base64)
     curl -s "http://alidns.aliyuncs.com/?$args&Signature=$(enc "$hash")"
 }
 function get_recordid() {
