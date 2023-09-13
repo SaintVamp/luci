@@ -1,9 +1,7 @@
 'use strict';
+'require form';
 'require view';
-'require rpc';
-'require ui';
 'require uci';
-'require fs';
 
 return view.extend({
 	load: function() {
