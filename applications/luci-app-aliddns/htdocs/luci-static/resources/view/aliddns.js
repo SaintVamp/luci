@@ -17,7 +17,7 @@ return view.extend({
 		m = new form.Map('aliddns', [_('阿里云ddns工具')],
 			_('阿里云ddns工具'));
 
-		s = m.section(form.NamedSection, 'config', 'aliddns', _('基础设置'));
+		s = m.section(form.TypedSection, 'alikey', 'aliddns', _('基础设置'));
 		s.addremove = false;
 
 		o = s.option(form.Value, "AccessKeyId", _("阿里云接入key"),

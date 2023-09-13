@@ -1,0 +1,3 @@
+config alikey 'example'
+	option AccessKeyId 0
+	option AccessKeySecret 1
