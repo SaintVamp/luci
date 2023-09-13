@@ -43,7 +43,7 @@ o.width = "5%"
 o.rmempty = false
 
 o = s:option(DummyValue, "status", translate("Status"))
-o.template = "socat/status"
+o.template = "socatui/status"
 o.value = translate("Collecting data...")
 
 o = s:option(DummyValue, "remarks", translate("Remarks"))
