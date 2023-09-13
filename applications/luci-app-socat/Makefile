@@ -16,7 +16,7 @@ LUCI_TITLE:=LuCI support for Socat
 LUCI_DEPENDS:=+socat
 
 define Package/$(PKG_NAME)/conffiles
-/etc/config/socat
+/etc/config/socatui
 endef
 
 include ../../luci.mk
