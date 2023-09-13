@@ -1,12 +1,14 @@
 local d = require "luci.dispatcher"
 local e = luci.model.uci.cursor()
+local sys = require "luci.sys"
 
 m = Map("socat")
 m.title = translate("Socat")
 m.description = translate("Socat is a versatile networking tool named after 'Socket CAT', which can be regarded as an N-fold enhanced version of NetCat")
-function m.on_apply(self)
+function m.on_after_apply(self)
     sys.exec("/etc/init.d/SocatUI restart")
 end
+
 s = m:section(NamedSection, "global", "global")
 s.anonymous = true
 s.addremove = false
