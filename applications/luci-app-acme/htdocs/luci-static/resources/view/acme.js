@@ -158,7 +158,7 @@ return view.extend({
 		o.placeholder = 90;
 		o.datatype    = 'uinteger';
 
-		return m.render()
+		return m.render();
 	}
-})
+});
 
