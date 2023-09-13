@@ -4,7 +4,7 @@
 	for(var i = 0; i < _status.length; i++) {
 		var id = _status[i].parentElement.parentElement.parentElement.id;
 		id = id.substr(id.lastIndexOf("-") + 1);
-		XHR.poll(1,'<%=url([[admin]], [[network]], [[socat]], [[status]])%>', {
+		XHR.poll(1,'<%=url([[admin]], [[network]], [[socatui]], [[status]])%>', {
 				index: i,
 				id: id
 			},

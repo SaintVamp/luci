@@ -2,7 +2,7 @@ local d = require "luci.dispatcher"
 local e = luci.model.uci.cursor()
 local sys = require "luci.sys"
 
-m = Map("socat")
+m = Map("socatui")
 m.title = translate("Socat")
 m.description = translate("Socat is a versatile networking tool named after 'Socket CAT', which can be regarded as an N-fold enhanced version of NetCat")
 function m.on_after_apply(self)
@@ -20,7 +20,7 @@ s = m:section(TypedSection, "config", translate("Port Forwards"))
 s.anonymous = true
 s.addremove = true
 s.template = "cbi/tblsection"
-s.extedit = d.build_url("admin", "network", "socat", "config", "%s")
+s.extedit = d.build_url("admin", "network", "socatui", "config", "%s")
 function s.filter(e, t)
 	if m:get(t, "protocol") == "port_forwards" then
 		return true
@@ -35,7 +35,7 @@ end
 function s.remove(e, t)
 	e.map.proceed = true
 	e.map:del(t)
-	luci.http.redirect(d.build_url("admin", "network", "socat"))
+	luci.http.redirect(d.build_url("admin", "network", "socatui"))
 end
 
 o = s:option(Flag, "enable", translate("Enable"))
@@ -77,6 +77,6 @@ o = s:option(Flag, "firewall_accept", translate("Open firewall port"))
 o.default = "1"
 o.rmempty = false
 
-m:append(Template("socat/list_status"))
+m:append(Template("socatui/list_status"))
 
 return m
