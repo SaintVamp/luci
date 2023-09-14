@@ -1,3 +1,8 @@
 config alikey 'AliKey'
-	option AccessKeyId 0
-	option AccessKeySecret 1
+	option AccessKeyId "AccessKeyId"
+	option AccessKeySecret "AccessKeySecret"
+	option Subdomain "ex"
+	option Domain "example.com"
+	option Iptype "A"
+	option TTL "600"
+	option DnsServer "dns23.hichina.com"

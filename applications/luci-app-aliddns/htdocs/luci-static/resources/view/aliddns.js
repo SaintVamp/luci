@@ -29,11 +29,33 @@ return view.extend({
         o.rmempty = false;
         o.datatype = "wpakey";
 
-
         o = s.option(form.Value, "AccessKeySecret", _("AccessKeySecret"),
             _("Type in aliyun accesskeysecret."));
         o.rmempty = false;
         o.datatype = "wpakey";
+
+        o = s.option(form.Value, "Subdomain", _("Subdomain"),
+            _("Type in resolve subdomain."));
+        o.rmempty = false;
+
+        o = s.option(form.Value, "Domain", _("Domain"),
+            _("Type in resolve domain."));
+        o.rmempty = false;
+
+        o = s.option(form.ListValue, "Iptype", _("Iptype"),
+            _("Type in resolve IP type."));
+        o.value("A", _("IPV4"));
+        o.value("AAAA", _("IPV6"));
+        o.default = "A";
+        o.rmempty = false;
+
+        o = s.option(form.Value, "TTL", _("TTL"),
+            _("Type in resolve domain ttl."));
+        o.rmempty = false;
+
+        o = s.option(form.Value, "DnsServer", _("DnsServer"),
+            _("Type in resolve domain dnsserver."));
+        o.rmempty = false;
 
         return m.render();
     }

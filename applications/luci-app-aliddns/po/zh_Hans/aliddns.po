@@ -15,3 +15,39 @@ msgstr "设置"
 
 msgid "Aliyun DDNS Tool"
 msgstr "阿里云ddns工具"
+
+msgid "Subdomain"
+msgstr "子域名"
+
+msgid "Type in resolve subdomain."
+msgstr "输入解析子域名"
+
+msgid "Domain"
+msgstr "域名"
+
+msgid "Type in resolve domain."
+msgstr "输入解析域名"
+
+msgid "Iptype"
+msgstr "解析IP类型"
+
+msgid "IPV4"
+msgstr "IPV4"
+
+msgid "IPV6"
+msgstr "IPV6"
+
+msgid "Type in resolve IP type."
+msgstr "输入解析IP类型"
+
+msgid "TTL"
+msgstr "TTL"
+
+msgid "Type in resolve domain ttl."
+msgstr "输入域名存活时间"
+
+msgid "DnsServer"
+msgstr "域名解析服务器"
+
+msgid "Type in resolve domain dnsserver."
+msgstr "输入域名解析服务器地址"

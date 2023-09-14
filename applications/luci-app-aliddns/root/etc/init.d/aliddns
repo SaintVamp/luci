@@ -1,0 +1,43 @@
+#!/bin/sh /etc/rc.common
+# Copyright (C) 2020 Lienol <lawlienol@gmail.com>
+
+START=98
+
+CONFIG=aliddns
+CONFIG_PATH=/var/etc/$CONFIG
+
+
+run_service() {
+#	config_get enable $1 enable
+#	[ "$enable" = "" ] && return 0
+	config_get AccessKeyId $1 config_get
+	[ "AccessKeyId" = "" ] && return 0
+	config_get AccessKeySecret $1 AccessKeySecret
+	[ "AccessKeySecret" = "" ] && return 0
+	rm -rf /usr/ddns/cronfile
+	echo "/bin/bash /usr/ddns/404v4.sh $AccessKeyId $AccessKeySecret" >/usr/ddns/cronfile
+  crontab -r
+  crontab cronfile
+}
+
+
+start() {
+#	enable=$(uci -q get $CONFIG.@global[0].enable)
+#	if [ "$enable" = "0" ];then
+#		stop_service
+#	else
+#		mkdir -p $CONFIG_PATH
+#		rm -f /var/etc/$CONFIG.port
+#		config_load $CONFIG
+#		config_foreach run_service "config"
+  run_service
+#	fi
+}
+
+stop() {
+  crontab -r
+}
+
+restart() {
+	start
+}

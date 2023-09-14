@@ -18,3 +18,33 @@ msgstr ""
 
 msgid "Aliyun DDNS Tool"
 msgstr ""
+
+msgid "Subdomain"
+msgstr ""
+
+msgid "Type in aliyun subdomain."
+msgstr ""
+
+msgid "Domain"
+msgstr ""
+
+msgid "Type in aliyun domain."
+msgstr ""
+
+msgid "Iptype"
+msgstr ""
+
+msgid "Type in aliyun iptype."
+msgstr ""
+
+msgid "TTL"
+msgstr ""
+
+msgid "Type in aliyun ttl."
+msgstr ""
+
+msgid "DnsServer"
+msgstr ""
+
+msgid "Type in aliyun dnsserver."
+msgstr ""
