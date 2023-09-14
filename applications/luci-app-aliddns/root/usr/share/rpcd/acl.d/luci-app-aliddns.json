@@ -8,6 +8,9 @@
 			"file": {
 				"/etc/init.d/AliDdns start" : [ "exec" ]
 			},
+			"ubus": {
+				"file": [ "write" ]
+			},
 			"uci": [ "aliddns" ]
 		}
 	}

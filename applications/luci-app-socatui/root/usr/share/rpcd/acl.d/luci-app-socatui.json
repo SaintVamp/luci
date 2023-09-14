@@ -1,0 +1,11 @@
+{
+	"luci-app-socatui": {
+		"description": "Grant UCI access for luci-app-socatui",
+		"read": {
+			"uci": [ "socatui" ]
+		},
+		"write": {
+			"uci": [ "socatui" ]
+		}
+	}
+}
