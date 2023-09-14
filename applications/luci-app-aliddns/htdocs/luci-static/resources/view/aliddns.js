@@ -22,10 +22,13 @@ return view.extend({
         o = s.option(form.Value, "AccessKeyId", _("阿里云接入key"),
             _("写接入key."));
         o.rmempty = false;
+        o.datatype = "wpakey";
+
 
         o = s.option(form.Value, "AccessKeySecret", _("阿里云接入密码"),
             _("写接入密码."));
         o.rmempty = false;
+        o.datatype = "wpakey";
 
         return m.render();
     }
