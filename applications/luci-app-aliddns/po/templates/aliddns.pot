@@ -1,0 +1,20 @@
+msgid ""
+msgstr "Content-Type: text/plain; charset=UTF-8"
+
+msgid "AccessKeyId"
+msgstr ""
+
+msgid "Type in aliyun accesskeyid."
+msgstr ""
+
+msgid "AccessKeySecret"
+msgstr ""
+
+msgid "Type in aliyun accesskeysecret."
+msgstr ""
+
+msgid "Config"
+msgstr ""
+
+msgid "Aliyun DDNS Tool"
+msgstr ""

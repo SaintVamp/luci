@@ -1,0 +1,17 @@
+msgid "AccessKeyId"
+msgstr "用户标识"
+
+msgid "Type in aliyun accesskeyid."
+msgstr "输入阿里云的AccessKeyId。"
+
+msgid "AccessKeySecret"
+msgstr "用户密钥"
+
+msgid "Type in aliyun accesskeysecret."
+msgstr "输入阿里云的AccessKeySecret。"
+
+msgid "Config"
+msgstr "设置"
+
+msgid "Aliyun DDNS Tool"
+msgstr "阿里云ddns工具"

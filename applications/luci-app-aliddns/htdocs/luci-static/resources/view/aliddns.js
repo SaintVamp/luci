@@ -14,19 +14,20 @@ return view.extend({
 
         var m, s, o;
 
-        m = new form.Map('aliddns', [_('阿里云ddns工具')]);
+        m = new form.Map('aliddns', [_('Aliyun DDNS Tool')]);
 
-        s = m.section(form.TypedSection, 'alikey', _('基础设置'));
+        s = m.section(form.TypedSection, 'alikey', _('Config'));
+        s.anonymous = true;
         s.addremove = false;
 
-        o = s.option(form.Value, "AccessKeyId", _("阿里云接入key"),
-            _("写接入key."));
+        o = s.option(form.Value, "AccessKeyId", _("AccessKeyId"),
+            _("Type in aliyun accesskeyid."));
         o.rmempty = false;
         o.datatype = "wpakey";
 
 
-        o = s.option(form.Value, "AccessKeySecret", _("阿里云接入密码"),
-            _("写接入密码."));
+        o = s.option(form.Value, "AccessKeySecret", _("AccessKeySecret"),
+            _("Type in aliyun accesskeysecret."));
         o.rmempty = false;
         o.datatype = "wpakey";
 
