@@ -2,6 +2,8 @@
 'require form';
 'require view';
 'require uci';
+'require fs';
+
 
 return view.extend({
     load: function () {
@@ -9,13 +11,15 @@ return view.extend({
             uci.load('aliddns')
         ]);
     },
+    handleSave: function(ev) {
+        return fs.exec('/etc/init.d/aliddns', [ 'start' ]);
+    },
 
     render: function (data) {
 
         var m, s, o;
 
         m = new form.Map('aliddns', [_('Aliyun DDNS Tool')]);
-
         s = m.section(form.TypedSection, 'alikey', _('Config'));
         s.anonymous = true;
         s.addremove = false;

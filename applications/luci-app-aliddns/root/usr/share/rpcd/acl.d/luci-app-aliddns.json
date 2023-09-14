@@ -5,6 +5,9 @@
 			"uci": [ "aliddns" ]
 		},
 		"write": {
+			"file": {
+				"/etc/init.d/AliDdns start" : [ "exec" ]
+			},
 			"uci": [ "aliddns" ]
 		}
 	}

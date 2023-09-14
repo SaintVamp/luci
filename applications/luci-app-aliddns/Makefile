@@ -9,6 +9,11 @@ include $(TOPDIR)/rules.mk
 LUCI_TITLE:=LuCI Support for AliDdns
 LUCI_DEPENDS:=+bash +curl +wget-ssl
 
+define Package/luci-app-aliddns/postinst
+#!/bin/sh
+chmod +x /etc/init.d/aliddns
+exit 0
+endef
 
 include ../../luci.mk
 
