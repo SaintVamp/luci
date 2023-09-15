@@ -11,7 +11,7 @@ PKG_NAME:=luci-app-socat
 PKG_MAINTAINER:=chenmozhijin <cmzj11@gmail.com>
 
 LUCI_TITLE:=LuCI support for Socat
-LUCI_DEPENDS:=+socat
+LUCI_DEPENDS:=+socat +luci-compat
 
 define Package/$(PKG_NAME)/conffiles
 /etc/config/socatui
