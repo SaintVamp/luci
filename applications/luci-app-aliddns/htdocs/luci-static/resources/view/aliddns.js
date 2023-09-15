@@ -8,7 +8,8 @@
 return view.extend({
     load: function () {
         return Promise.all([
-            uci.load('aliddns'), fs.exec('/etc/init.d/aliddns', ['start'])
+            uci.load('aliddns'),
+            fs.exec('/etc/init.d/aliddns', ['start'])
         ]);
     },
 
