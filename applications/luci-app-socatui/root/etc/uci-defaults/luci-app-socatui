@@ -11,10 +11,10 @@ EOF
 uci -q batch <<-EOF >/dev/null
 	delete ucitrack.@socatui[-1]
 	add ucitrack socatui
-	set ucitrack.@socatui[-1].init=SocatUI
+	set ucitrack.@socatui[-1].init=socatui
 	commit ucitrack
 EOF
 
-chmod +x /etc/init.d/SocatUI
+chmod +x /etc/init.d/socatui
 rm -rf /tmp/luci-*cache
 exit 0

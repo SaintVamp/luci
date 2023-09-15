@@ -1,2 +1,10 @@
 # forward port 8000 on IPv6 to IPv4 host port 80
 # change enable to '1' to use this example
+config global 'AliKey'
+	option AccessKeyId "qwdasd"
+	option AccessKeySecret "aszxccg"
+	option Subdomain "ex"
+	option Domain "example.com"
+	option Iptype "A"
+	option TTL "600"
+	option DnsServer "dns23.hichina.com"
