@@ -15,7 +15,7 @@ run_service() {
 	config_get AccessKeySecret $1 AccessKeySecret
 	[ "AccessKeySecret" = "" ] && return 0
 	rm -rf /usr/ddns/cronfile
-	echo "*/5 * * * * /bin/bash /usr/ddns/404v4.sh $AccessKeyId $AccessKeySecret" > /usr/ddns/cronfile
+	echo "*/5 * * * * /bin/bash /usr/ddns/ddns.sh $AccessKeyId $AccessKeySecret" > /usr/ddns/cronfile
   crontab -r
   crontab /usr/ddns/cronfile
 
