@@ -8,11 +8,8 @@
 return view.extend({
     load: function () {
         return Promise.all([
-            uci.load('aliddns')
+            uci.load('aliddns'), fs.exec('/etc/init.d/aliddns', ['start'])
         ]);
-    },
-    handleSave: function(ev) {
-        return fs.exec('/etc/init.d/aliddns', [ 'start' ]);
     },
 
     render: function (data) {

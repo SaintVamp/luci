@@ -1,6 +1,6 @@
 config alikey 'AliKey'
-	option AccessKeyId "AccessKeyId"
-	option AccessKeySecret "AccessKeySecret"
+	option AccessKeyId "qwdasd"
+	option AccessKeySecret "aszxccg"
 	option Subdomain "ex"
 	option Domain "example.com"
 	option Iptype "A"

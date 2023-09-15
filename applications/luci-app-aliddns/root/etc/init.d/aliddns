@@ -10,14 +10,15 @@ CONFIG_PATH=/var/etc/$CONFIG
 run_service() {
 #	config_get enable $1 enable
 #	[ "$enable" = "" ] && return 0
-	config_get AccessKeyId $1 config_get
+	config_get AccessKeyId $1 AccessKeyId
 	[ "AccessKeyId" = "" ] && return 0
 	config_get AccessKeySecret $1 AccessKeySecret
 	[ "AccessKeySecret" = "" ] && return 0
 	rm -rf /usr/ddns/cronfile
-	echo "/bin/bash /usr/ddns/404v4.sh $AccessKeyId $AccessKeySecret" >/usr/ddns/cronfile
+	echo "*/5 * * * * /bin/bash /usr/ddns/404v4.sh $AccessKeyId $AccessKeySecret" > /usr/ddns/cronfile
   crontab -r
-  crontab cronfile
+  crontab /usr/ddns/cronfile
+
 }
 
 
@@ -30,7 +31,9 @@ start() {
 #		rm -f /var/etc/$CONFIG.port
 #		config_load $CONFIG
 #		config_foreach run_service "config"
-  run_service
+
+  config_load $CONFIG
+  config_foreach run_service "alikey"
 #	fi
 }
 

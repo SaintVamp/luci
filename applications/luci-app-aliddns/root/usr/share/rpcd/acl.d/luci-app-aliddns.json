@@ -6,10 +6,10 @@
 		},
 		"write": {
 			"file": {
-				"/etc/init.d/AliDdns start" : [ "exec" ]
+				"/etc/init.d/aliddns start" : [ "exec" ]
 			},
 			"ubus": {
-				"file": [ "write" ]
+				"file": [ "exec", "write" ]
 			},
 			"uci": [ "aliddns" ]
 		}
