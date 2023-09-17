@@ -20,7 +20,7 @@ s = m:section(TypedSection, "config", translate("Port Forwards"))
 s.anonymous = true
 s.addremove = true
 s.template = "cbi/tblsection"
-s.extedit = d.build_url("admin", "network", "socat", "config", "%s")
+s.extedit = d.build_url("admin", "network", "socatui", "config", "%s")
 function s.filter(e, t)
 	if m:get(t, "protocol") == "port_forwards" then
 		return true
