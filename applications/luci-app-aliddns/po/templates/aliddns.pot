@@ -5,7 +5,7 @@ msgid "AccessKeyId"
 msgstr ""
 
 msgid "Type in aliyun accesskeyid."
-msgstr ""
+msgstr "。"
 
 msgid "AccessKeySecret"
 msgstr ""
@@ -22,29 +22,35 @@ msgstr ""
 msgid "Subdomain"
 msgstr ""
 
-msgid "Type in aliyun subdomain."
+msgid "Type in resolve subdomain."
 msgstr ""
 
 msgid "Domain"
 msgstr ""
 
-msgid "Type in aliyun domain."
+msgid "Type in resolve domain."
 msgstr ""
 
 msgid "Iptype"
 msgstr ""
 
-msgid "Type in aliyun iptype."
+msgid "IPV4"
+msgstr ""
+
+msgid "IPV6"
+msgstr ""
+
+msgid "Type in resolve IP type."
 msgstr ""
 
 msgid "TTL"
 msgstr ""
 
-msgid "Type in aliyun ttl."
+msgid "Type in resolve domain ttl."
 msgstr ""
 
 msgid "DnsServer"
 msgstr ""
 
-msgid "Type in aliyun dnsserver."
+msgid "Type in resolve domain dnsserver."
 msgstr ""
