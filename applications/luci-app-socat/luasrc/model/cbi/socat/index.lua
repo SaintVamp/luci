@@ -6,7 +6,7 @@ m = Map("socatui")
 m.title = translate("Socat")
 m.description = translate("Socat is a versatile networking tool named after 'Socket CAT', which can be regarded as an N-fold enhanced version of NetCat")
 function m.on_after_apply(self)
-    sys.exec("/etc/init.d/SocatUI restart")
+    sys.exec("/etc/init.d/socatui restart")
 end
 
 s = m:section(NamedSection, "global", "global")
@@ -35,7 +35,7 @@ end
 function s.remove(e, t)
 	e.map.proceed = true
 	e.map:del(t)
-	luci.http.redirect(d.build_url("admin", "network", "socat"))
+	luci.http.redirect(d.build_url("admin", "network", "socatui"))
 end
 
 o = s:option(Flag, "enable", translate("Enable"))
