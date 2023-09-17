@@ -10,9 +10,10 @@ LUCI_TITLE:=CPU Info
 LUCI_DEPENDS:=+ethtool-full +lm-sensors
 PKG_NAME:=luci-app-cpu
 
-define Package/$(PKG_NAME)/postinst
+define Package/$(PKG_NAME)/install
 #!/bin/sh
 chmod +x /usr/libexec/rpcd/luci.cpu
+chmod +x /usr/bin/ethinfo
 /etc/inin.t/rpcd restart
 exit 0
 endef

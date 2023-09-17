@@ -10,7 +10,7 @@ LUCI_TITLE:=LuCI Support for AliDdns
 LUCI_DEPENDS:=+bash +curl +wget-ssl
 PKG_NAME:=luci-app-aliddns
 
-define Package/$(PKG_NAME)/postinst
+define Package/$(PKG_NAME)/install
 #!/bin/sh
 chmod +x /etc/init.d/aliddns
 exit 0
