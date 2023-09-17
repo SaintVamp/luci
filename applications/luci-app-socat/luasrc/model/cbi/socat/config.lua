@@ -1,7 +1,7 @@
 local d = require "luci.dispatcher"
 
 m = Map("socatui", translate("Socat Config"))
-m.redirect = d.build_url("admin", "network", "socat")
+m.redirect = d.build_url("admin", "network", "socatui")
 
 s = m:section(NamedSection, arg[1], "config", "")
 s.addremove = false
