@@ -37,7 +37,7 @@ return view.extend({
         s.anonymous = true
         s.addremove = true
         s.template = "cbi/tblsection"
-        s.extedit = dispatcher.build_url("admin", "network", "socat", "config", "%s")
+        s.extedit = dispatcher.build_url("admin", "network", "socatui", "config", "%s")
         s.filter = function (e, t) {
             if (m.get(t, "protocol") == "port_forwards") {
                 return true
@@ -56,7 +56,7 @@ return view.extend({
         e.map
     :
         del(t)
-        luci.http.redirect(d.build_url("admin", "network", "socat"))
+        luci.http.redirect(d.build_url("admin", "network", "socatui"))
         end
 
 

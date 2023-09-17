@@ -9,13 +9,13 @@ CONFIG_PATH=/var/etc/$CONFIG
 add_rule() {
 	accept_port=$(cat /var/etc/$CONFIG.port | tr "\n" " ") || echo "not open firewall ports"
 	if [ "$accept_port" ]; then
-		uci -q delete firewall.socat
-		uci set firewall.socat=rule
-		uci set firewall.socat.name="socat"
-		uci set firewall.socat.target="ACCEPT"
-		uci set firewall.socat.src='*'
-		uci set firewall.socat.dest_port="$accept_port"
-		uci set firewall.socat.enabled="1"
+		uci -q delete firewall.socatui
+		uci set firewall.socatui=rule
+		uci set firewall.socatui.name="socat"
+		uci set firewall.socatui.target="ACCEPT"
+		uci set firewall.socatui.src='*'
+		uci set firewall.socatui.dest_port="$accept_port"
+		uci set firewall.socatui.enabled="1"
 		uci commit firewall
 		/etc/init.d/firewall reload >/dev/null 2>&1
 	else
@@ -24,7 +24,7 @@ add_rule() {
 }
 
 del_rule() {
-	uci -q delete firewall.socat
+	uci -q delete firewall.socatui
 	uci commit firewall
 	/etc/init.d/firewall reload >/dev/null 2>&1
 }
@@ -45,7 +45,7 @@ run_service() {
 	config_get proxy_server $1 proxy_server
 	config_get proxy_port $1 proxy_port
 	config_get firewall_accept $1 firewall_accept
-	ln -s /usr/bin/socat ${CONFIG_PATH}/$1
+	ln -s /usr/bin/socatui ${CONFIG_PATH}/$1
 	
 	if [ "$reuseaddr" == "1" ]; then
 		reuseaddr=",reuseaddr"

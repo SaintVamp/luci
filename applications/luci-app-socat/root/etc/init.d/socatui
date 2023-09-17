@@ -9,13 +9,13 @@ CONFIG_PATH=/var/etc/$CONFIG
 add_rule() {
 	accept_port=$(cat /var/etc/$CONFIG.port | tr "\n" " ") || echo "not open firewall ports"
 	if [ "$accept_port" ]; then
-		uci -q delete firewall.socat
-		uci set firewall.socat=rule
-		uci set firewall.socat.name="socat"
-		uci set firewall.socat.target="ACCEPT"
-		uci set firewall.socat.src='*'
-		uci set firewall.socat.dest_port="$accept_port"
-		uci set firewall.socat.enabled="1"
+		uci -q delete firewall.socatui
+		uci set firewall.socatui=rule
+		uci set firewall.socatui.name="socatui"
+		uci set firewall.socatui.target="ACCEPT"
+		uci set firewall.socatui.src='*'
+		uci set firewall.socatui.dest_port="$accept_port"
+		uci set firewall.socatui.enabled="1"
 		uci commit firewall
 		/etc/init.d/firewall reload >/dev/null 2>&1
 	else
@@ -24,7 +24,7 @@ add_rule() {
 }
 
 del_rule() {
-	uci -q delete firewall.socat
+	uci -q delete firewall.socatui
 	uci commit firewall
 	/etc/init.d/firewall reload >/dev/null 2>&1
 }
