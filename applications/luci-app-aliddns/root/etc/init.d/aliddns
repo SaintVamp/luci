@@ -14,8 +14,13 @@ run_service() {
 	[ "AccessKeyId" = "" ] && return 0
 	config_get AccessKeySecret $1 AccessKeySecret
 	[ "AccessKeySecret" = "" ] && return 0
+	config_get Subdomain $1 Subdomain
+	config_get Domain $1 Domain
+	config_get Iptype $1 Iptype
+	config_get TTL $1 TTL
+	config_get DnsServer $1 DnsServer
 	rm -rf /usr/ddns/cronfile
-	echo "*/5 * * * * /bin/bash /usr/ddns/ddns.sh $AccessKeyId $AccessKeySecret" > /usr/ddns/cronfile
+	echo "*/5 * * * * /bin/bash /usr/ddns/ddns.sh $AccessKeyId $AccessKeySecret $Subdomain $Domain $Iptype $TTL $DnsServer" > /usr/ddns/cronfile
   crontab -r
   crontab /usr/ddns/cronfile
 

@@ -36,25 +36,23 @@ set -e
 # 参数
 #
 # (*)阿里云 AccessKeyId
-#AccessKeyId=`echo 'TFRBSTV0UThDb2pQRWMxaWh0eUx5cEhoCg==' | base64 -d`
 AccessKeyId=$1
 # (*)阿里云 AccessKeySecret
-#AccessKeySecret=`echo 'cnpWUDZjWGw5RzRVQjQ2YjZRSGNiNlBjQk1rd24yCg==' | base64 -d`
 AccessKeySecret=$2
 
 
 
 # (*)域名：test.mydomain.com
-aliddns_subdomain='404' #'test'
-aliddns_domain='svsoft.fun' #'mydomain.com'
+aliddns_subdomain=$3 #'test'
+aliddns_domain=$4 #'mydomain.com'
 
 # (*)ip地址类型：'A' 或 'AAAA'，代表ipv4 和 ipv6
-aliddns_iptype='A' # 'A' 或 'AAAA'，代表ipv4 和 ipv6
+aliddns_iptype=$5 # 'A' 或 'AAAA'，代表ipv4 和 ipv6
 
 # TTL 默认10分钟 = 600秒
-aliddns_ttl="600" #"600"
+aliddns_ttl=$6 #"600"
 
-dns_server="dns23.hichina.com"
+dns_server=$7
 
 #--------------------------------------------------------------
 #--------------------------------------------------------------
