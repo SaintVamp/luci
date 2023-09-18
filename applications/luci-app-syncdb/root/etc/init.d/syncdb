@@ -1,0 +1,41 @@
+#!/bin/sh /etc/rc.common
+# Copyright (C) 2020 Lienol <lawlienol@gmail.com>
+
+START=98
+
+CONFIG=aliddns
+CONFIG_PATH=/var/etc/$CONFIG
+
+
+run_service() {
+
+	rm -rf /usr/syncdb/cronfile
+	echo "* * */1 * * python /usr/syncdb/syndDB.py" > /usr/ddns/cronfile
+  crontab -l >
+  crontab /usr/ddns/cronfile
+
+}
+
+
+start() {
+#	enable=$(uci -q get $CONFIG.@global[0].enable)
+#	if [ "$enable" = "0" ];then
+#		stop_service
+#	else
+#		mkdir -p $CONFIG_PATH
+#		rm -f /var/etc/$CONFIG.port
+#		config_load $CONFIG
+#		config_foreach run_service "config"
+
+  config_load $CONFIG
+  config_foreach run_service "alikey"
+#	fi
+}
+
+stop() {
+  crontab -r
+}
+
+restart() {
+	start
+}
