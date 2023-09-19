@@ -7,7 +7,7 @@
 include $(TOPDIR)/rules.mk
 
 LUCI_TITLE:=LuCI Support for syncDB
-LUCI_DEPENDS:=+python +pymysql +pymongo
+LUCI_DEPENDS:=+python3 +pymysql +pymongo
 PKG_NAME:=luci-app-syncdb
 
 define Package/$(PKG_NAME)/install
