@@ -19,13 +19,27 @@ run_service() {
 	config_get Iptype $1 Iptype
 	config_get TTL $1 TTL
 	config_get DnsServer $1 DnsServer
-	rm -rf /usr/ddns/cronfile
-	echo "*/5 * * * * /bin/bash /usr/ddns/ddns.sh $AccessKeyId $AccessKeySecret $Subdomain $Domain $Iptype $TTL $DnsServer" > /usr/ddns/cronfile
-  crontab -r
-  crontab /usr/ddns/cronfile
+
+	echo "*/5 * * * * /bin/bash /usr/ddns/ddns.sh $AccessKeyId $AccessKeySecret $Subdomain $Domain $Iptype $TTL $DnsServer" >> /usr/ddns/cronfile
+
+
 
 }
-
+conf_set(){
+  cronfile="/usr/ddns/cronfile"
+  keyword="ddns"
+  rm -rf $cronfile
+  `crontab -l > $cronfile`
+  for line in $(cat $cronfile)
+  do
+      if [[ $line == *$keyword* ]]
+      then
+          pass
+      else
+          `echo $line >> $cronfile`
+      fi
+  done
+}
 
 start() {
 #	enable=$(uci -q get $CONFIG.@global[0].enable)
@@ -36,14 +50,18 @@ start() {
 #		rm -f /var/etc/$CONFIG.port
 #		config_load $CONFIG
 #		config_foreach run_service "config"
-
+	conf_set
   config_load $CONFIG
   config_foreach run_service "alikey"
+  crontab -r
+  crontab /usr/ddns/cronfile
 #	fi
 }
 
 stop() {
+  conf_set
   crontab -r
+  crontab /usr/ddns/cronfile
 }
 
 restart() {
