@@ -24,8 +24,6 @@ run_service() {
 
 	echo "*/5 * * * * /bin/bash /usr/ddns/ddns.sh $AccessKeyId $AccessKeySecret $Subdomain $Domain $Iptype $TTL $DnsServer" >> /usr/ddns/cronfile
 
-
-
 }
 conf_set(){
   keyword="ddns"
@@ -56,14 +54,14 @@ start() {
   config_load $CONFIG
   config_foreach run_service "alikey"
   crontab -r
-  crontab /usr/ddns/cronfile
+  crontab $cronfile
 #	fi
 }
 
 stop() {
   conf_set
   crontab -r
-  crontab /usr/ddns/cronfile
+  crontab $cronfile
 }
 
 restart() {
