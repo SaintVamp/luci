@@ -7,7 +7,7 @@
 include $(TOPDIR)/rules.mk
 
 LUCI_TITLE:=SV need software
-LUCI_DEPENDS:=+luci-app-wol +luci-app-syncdb +luci-app-socat +luci-app-cpu +luci-app-aliddns +luci-app-acme +luci
+LUCI_DEPENDS:=+luci-app-wol +luci-app-syncdb +luci-app-socat +luci-app-cpu +luci-app-aliddns +luci-app-acme +luci +LANG_zh_Hans
 PKG_NAME:=luci-app-sv
 
 include ../../luci.mk
