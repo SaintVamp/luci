@@ -4,19 +4,21 @@ START=98
 
 run_service() {
 
+  tempfile="/usr/syncdb/tempfile"
   cronfile="/usr/syncdb/cronfile"
   keyword="syncdb"
-	rm -rf $cronfile
-  `crontab -l > $cronfile`
-  for line in $(cat $cronfile)
+  rm -rf $cronfile
+  rm -rf $tempfile
+  `crontab -l > $tempfile`
+  while read -r line
   do
-      if [[ $line == *$keyword* ]]
-      then
-          pass
-      else
-          `echo $line >> $cronfile`
-      fi
-  done
+    if [[ "$line" == "*$keyword*" ]]
+    then
+      pass
+    else
+      `echo "$line" >> $cronfile`
+    fi
+  done < $tempfile
 
 
 }
