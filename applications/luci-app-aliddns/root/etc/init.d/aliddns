@@ -5,6 +5,8 @@ START=98
 
 CONFIG=aliddns
 CONFIG_PATH=/var/etc/$CONFIG
+cronfile="/usr/ddns/cronfile"
+tempfile="/usr/ddns/tempfile"
 
 
 run_service() {
@@ -26,19 +28,19 @@ run_service() {
 
 }
 conf_set(){
-  cronfile="/usr/ddns/cronfile"
   keyword="ddns"
   rm -rf $cronfile
-  `crontab -l > $cronfile`
-  for line in $(cat $cronfile)
+  rm -rf $tempfile
+  `crontab -l > $tempfile`
+  while read -r line
   do
-      if [[ $line == *$keyword* ]]
-      then
-          pass
-      else
-          `echo $line >> $cronfile`
-      fi
-  done
+    if [[ "$line" == "*$keyword*" ]]
+    then
+      pass
+    else
+      `echo "$line" >> $cronfile`
+    fi
+  done < $tempfile
 }
 
 start() {

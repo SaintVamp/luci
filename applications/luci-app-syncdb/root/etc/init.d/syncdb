@@ -1,11 +1,11 @@
 #!/bin/sh /etc/rc.common
 
 START=98
+tempfile="/usr/syncdb/tempfile"
+cronfile="/usr/syncdb/cronfile"
 
 run_service() {
 
-  tempfile="/usr/syncdb/tempfile"
-  cronfile="/usr/syncdb/cronfile"
   keyword="syncdb"
   rm -rf $cronfile
   rm -rf $tempfile
@@ -20,7 +20,6 @@ run_service() {
     fi
   done < $tempfile
 
-
 }
 
 
@@ -28,13 +27,13 @@ start() {
   run_service
   echo "* * */1 * * python /usr/syncdb/syndDB.py" >> $cronfile
   crontab -r
-  crontab /usr/ddns/cronfile
+  crontab $cronfile
 }
 
 stop() {
   run_service
   crontab -r
-  crontab /usr/ddns/cronfile
+  crontab $cronfile
 }
 
 restart() {
