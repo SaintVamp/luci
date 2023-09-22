@@ -25,7 +25,7 @@ run_service() {
 
 start() {
   run_service
-  echo "* * */1 * * python /usr/syncdb/syndDB.py" >> $cronfile
+  echo "* */24 * * * python /usr/syncdb/syndDB.py" >> $cronfile
   crontab -r
   crontab $cronfile
 }

@@ -32,12 +32,17 @@ return view.extend({
         o.rmempty = false;
         o.datatype = "wpakey";
 
-        o = s.option(form.Value, "Subdomain", _("Subdomain"),
+        o = s.option(form.ListValue, "Subdomain", _("Subdomain"),
             _("Type in resolve subdomain."));
+        o.value("404", _("404"));
+        o.value("2804", _("2804"));
+        o.default = "404";
         o.rmempty = false;
 
-        o = s.option(form.Value, "Domain", _("Domain"),
+        o = s.option(form.ListValue, "Domain", _("Domain"),
             _("Type in resolve domain."));
+        o.value("svsoft.fun", _("svsoft"));
+        o.default = "svsoft.fun";
         o.rmempty = false;
 
         o = s.option(form.ListValue, "Iptype", _("Iptype"),
