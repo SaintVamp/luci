@@ -1,0 +1,1 @@
+nohup python /usr/sv/py_book.py > 1.log 2>&1 &
