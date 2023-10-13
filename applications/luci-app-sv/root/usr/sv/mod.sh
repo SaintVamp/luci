@@ -2,7 +2,9 @@ chmod +x /etc/init.d/aliddns
 chmod +x /etc/init.d/syncdb
 chmod +x /usr/bin/ethinfo
 mkdir /etc/nginx/ca/
-
+[ ! $1 ] && echo "lose param" && exit 1
+uci set system.@system[0].hostname=$1
+uci get system.@system[0].hostname
 cronfile="/usr/sv/cronfile"
 tempfile="/usr/sv/tempfile"
 conf_set(){
