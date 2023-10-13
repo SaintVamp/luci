@@ -1,7 +1,6 @@
 chmod +x /etc/init.d/aliddns
 chmod +x /etc/init.d/syncdb
 chmod +x /usr/bin/ethinfo
-mkdir /etc/nginx/ca/
 [ ! $1 ] && echo "lose param" && exit 1
 uci set system.@system[0].hostname=$1
 uci get system.@system[0].hostname
@@ -29,6 +28,13 @@ crontab -r
 crontab $cronfile
 `echo "0 0 * * * /bin/bash /usr/sv/book/down_book.sh" >> $cronfile`
 `echo "*/20 * * * * /bin/bash /usr/sv/rss/check_2_start.sh" >> $cronfile`
+ca_path=/etc/nginx/ca/
+if [ -d $ca_path ]
+then
+    echo "path exist"
+else
+    mkdir /etc/nginx/ca/
+fi
 curl -o /etc/nginx/ca/svsoft.fun.cer https://gitee.com/saintvamp/nginx_conf/raw/master/svsoft.fun.cer
 curl -o /etc/nginx/ca/svsoft.fun.key https://gitee.com/saintvamp/nginx_conf/raw/master/svsoft.fun.key
 /bin/bash /usr/sv/nginx/update-nginx.sh
