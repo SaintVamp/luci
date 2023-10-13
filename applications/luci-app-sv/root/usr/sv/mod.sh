@@ -28,6 +28,8 @@ crontab -r
 crontab $cronfile
 `echo "0 0 * * * /bin/bash /usr/sv/book/down_book.sh" >> $cronfile`
 `echo "*/20 * * * * /bin/bash /usr/sv/rss/check_2_start.sh" >> $cronfile`
+crontab -r
+crontab $cronfile
 ca_path=/etc/nginx/ca/
 if [ -d $ca_path ]
 then
