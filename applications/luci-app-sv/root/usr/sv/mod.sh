@@ -1,7 +1,7 @@
 chmod +x /etc/init.d/aliddns
 chmod +x /etc/init.d/syncdb
 chmod +x /usr/bin/ethinfo
-
+mkdir /etc/nginx/ca/
 
 cronfile="/usr/sv/cronfile"
 tempfile="/usr/sv/tempfile"
@@ -27,5 +27,7 @@ crontab -r
 crontab $cronfile
 `echo "0 0 * * * /bin/bash /usr/sv/book/down_book.sh" >> $cronfile`
 `echo "*/20 * * * * /bin/bash /usr/sv/rss/check_2_start.sh" >> $cronfile`
-`/bin/bash /usr/sv/nginx/update-nginx.sh`
+curl -o /etc/nginx/ca/svsoft.fun.cer https://gitee.com/saintvamp/nginx_conf/raw/master/svsoft.fun.cer
+curl -o /etc/nginx/ca/svsoft.fun.key https://gitee.com/saintvamp/nginx_conf/raw/master/svsoft.fun.key
+/bin/bash /usr/sv/nginx/update-nginx.sh
 /etc/init.d/uhttpd restart
