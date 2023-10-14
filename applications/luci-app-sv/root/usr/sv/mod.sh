@@ -7,18 +7,18 @@ uci get system.@system[0].hostname
 cronfile="/usr/sv/cronfile"
 tempfile="/usr/sv/tempfile"
 conf_set(){
-  rm -rf $cronfile
-  rm -rf $tempfile
-  `crontab -l > $tempfile`
-  while read -r line
-  do
-    if [[ "$line" == "*$1*" ]]
-    then
-      pass
-    else
-      `echo "$line" >> $cronfile`
-    fi
-  done < $tempfile
+    rm -rf $cronfile
+    rm -rf $tempfile
+    `crontab -l > $tempfile`
+    while read -r line
+    do
+        if [[ "$line" == "*$1*" ]]
+        then
+            echo 'pass'
+        else
+            `echo "$line" >> $cronfile`
+        fi
+    done < $tempfile
 }
 conf_set "down_book"
 crontab -r
