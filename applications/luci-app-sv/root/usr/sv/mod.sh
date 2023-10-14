@@ -1,35 +1,35 @@
 chmod +x /etc/init.d/aliddns
 chmod +x /etc/init.d/syncdb
 chmod +x /usr/bin/ethinfo
-[ ! $1 ] && echo "lose param" && exit 1
-uci set system.@system[0].hostname=$1
+[ ! "$1" ] && echo "lose param" && exit 1
+uci set system.@system[0].hostname="$1"
 uci get system.@system[0].hostname
-cronfile="/usr/sv/cronfile"
-tempfile="/usr/sv/tempfile"
+cron_file="/usr/sv/cronfile"
+temp_file="/usr/sv/tempfile"
 conf_set(){
-    rm -rf $cronfile
-    rm -rf $tempfile
-    `crontab -l > $tempfile`
+    rm -rf $cron_file
+    rm -rf $temp_file
+    $(crontab -l > $temp_file)
     while read -r line
     do
         if [[ "$line" == "*$1*" ]]
         then
             echo 'pass'
         else
-            `echo "$line" >> $cronfile`
+            $(echo "$line" >> $cron_file)
         fi
-    done < $tempfile
+    done < $temp_file
 }
 conf_set "down_book"
 crontab -r
-crontab $cronfile
+crontab $cron_file
 conf_set "check_2_start"
 crontab -r
-crontab $cronfile
-`echo "0 0 * * * /bin/bash /usr/sv/book/down_book.sh" >> $cronfile`
-`echo "*/20 * * * * /bin/bash /usr/sv/rss/check_2_start.sh" >> $cronfile`
+crontab $cron_file
+$(echo "0 0 * * * /bin/bash /usr/sv/book/down_book.sh" >> $cron_file)
+$(echo "*/20 * * * * /bin/bash /usr/sv/rss/check_2_start.sh" >> $cron_file)
 crontab -r
-crontab $cronfile
+crontab $cron_file
 ca_path=/etc/nginx/ca/
 if [ -d $ca_path ]
 then
