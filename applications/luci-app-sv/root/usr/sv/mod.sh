@@ -26,18 +26,9 @@ crontab $cron_file
 conf_set "check_2_start"
 crontab -r
 crontab $cron_file
-$(echo "0 0 * * * /bin/bash /usr/sv/book/down_book.sh" >> $cron_file)
-$(echo "*/20 * * * * /bin/bash /usr/sv/rss/check_2_start.sh" >> $cron_file)
+$(echo "0 0 * * * /bin/bash /usr/sv/book/init-book.sh" >> $cron_file)
+$(echo "*/20 * * * * /bin/bash /usr/sv/rss/init-rss.sh" >> $cron_file)
 crontab -r
 crontab $cron_file
-ca_path=/etc/nginx/ca/
-if [ -d $ca_path ]
-then
-    echo "path exist"
-else
-    mkdir /etc/nginx/ca/
-fi
-curl -o /etc/nginx/ca/svsoft.fun.cer https://gitee.com/saintvamp/nginx_conf/raw/master/svsoft.fun.cer
-curl -o /etc/nginx/ca/svsoft.fun.key https://gitee.com/saintvamp/nginx_conf/raw/master/svsoft.fun.key
-/bin/bash /usr/sv/nginx/update-nginx.sh
+/bin/bash /usr/sv/nginx/init-nginx.sh
 /etc/init.d/uhttpd restart
