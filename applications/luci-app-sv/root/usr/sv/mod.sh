@@ -20,10 +20,10 @@ conf_set(){
         fi
     done < $temp_file
 }
-conf_set "down_book"
+conf_set "init-book"
 crontab -r
 crontab $cron_file
-conf_set "check_2_start"
+conf_set "init-rss"
 crontab -r
 crontab $cron_file
 $(echo "0 0 * * * /bin/bash /usr/sv/book/init-book.sh" >> $cron_file)
