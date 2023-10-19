@@ -315,6 +315,7 @@ then
     echo "add record starting"
     aliddns_record_id=`add_record | get_recordid`
     curl -s "http://4.0.4.51:8080/Serv/ddns?domain=$aliddns_name&ip=$(enc $machine_ip)"
+    curl -s "https://tomcat.404.svsoft.fun:404/Serv/ddns?domain=$aliddns_name&ip=$(enc $machine_ip)"
     if [ "$aliddns_record_id" = "" ]
     then
         echo "aliddns_record_id is empty. \n"
@@ -331,5 +332,6 @@ else
     echo "update record starting"
     update_record $aliddns_record_id
     curl -s "http://4.0.4.51:8080/Serv/ddns?domain=$aliddns_name&ip=$(enc $machine_ip)"
+    curl -s "https://tomcat.404.svsoft.fun:404/Serv/ddns?domain=$aliddns_name&ip=$(enc $machine_ip)"
     echo "updated record $aliddns_record_id \n"
 fi
