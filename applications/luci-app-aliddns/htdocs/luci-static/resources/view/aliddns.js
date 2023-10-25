@@ -42,6 +42,7 @@ return view.extend({
         o = s.option(form.ListValue, "Domain", _("Domain"),
             _("Type in resolve domain."));
         o.value("svsoft.fun", _("svsoft"));
+        o.value("efdata.fun", _("efdata"));
         o.default = "svsoft.fun";
         o.rmempty = false;
 
