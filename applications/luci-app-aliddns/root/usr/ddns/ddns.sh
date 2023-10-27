@@ -316,7 +316,7 @@ hostname=$(uci get system.@system[0].hostname)
 if [ "$hostname" = "R404" ]; then
     url_name="4.0.4.51:8080"
 elif [ "$hostname" = "R2804" ]; then
-    url_name="tomcat.404.svsoft.fun:404"
+    url_name="28.0.4.20:8848"
 fi
 if [ "$ali_ddns_record_id" = "" ]
 then
