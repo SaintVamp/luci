@@ -293,7 +293,8 @@ else
     echo "machine_ip = $machine_ip"
     ali_ddns_record_id=$ali_ddns_ipv6_record_id
     echo "-1"
-    exist_local=$($(ip addr show br-lan) | grep "scope global dynamic noprefixroute" | grep -c "$machine_ip")
+    temp_param=$(ip addr show br-lan)
+    exist_local=$(echo "$temp_param" | grep "scope global dynamic noprefixroute" | grep -c "$machine_ip")
     echo "0"
     exist_ddns=$(echo "$ddns_ip" | grep -c "$machine_ip" )
     echo "1"
