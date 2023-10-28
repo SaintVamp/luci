@@ -260,15 +260,15 @@ then
     fi
 fi
 
-ddns_ip=getDDNS_IP
+ddns_ip=$(getDDNS_IP)
 echo "ddns_ip = $ddns_ip"
 if [ "$ali_ddns_ip_type" = 'A' ]
 then
     echo "ddns is IPv4."
-    machine_ip=getMachine_IPv4
+    machine_ip=$(getMachine_IPv4)
     if [ "$machine_ip" = "" ]
     then
-        machine_ip=getMachine_IPv42
+        machine_ip=$(getMachine_IPv42)
     fi
     echo "machine_ip = $machine_ip"
     ali_ddns_record_id=$ali_ddns_ipv4_record_id
@@ -277,16 +277,16 @@ then
     exist_ddns_local=$(ip addr show pppoe-wan | grep "scope global pppoe-wan" | grep -c "$ddns_ip")
 else
     echo "ddns is IPv6."
-    machine_ip=getMachine_IPv6
+    machine_ip=$(getMachine_IPv6)
     if [ "$machine_ip" = "" ]
     then
-        machine_ip=getMachine_IPv62
+        machine_ip=$(getMachine_IPv62)
     fi
     echo "machine_ip = $machine_ip"
     ali_ddns_record_id=$ali_ddns_ipv6_record_id
-    exist_local=$(ip addr show br-lan | grep "scope global dynamic noprefixroute" | grep -c $machine_ip)
-    exist_ddns=$(echo $ddns_ip | grep -c $machine_ip )
-    exist_ddns_local=$(ip addr show br-lan | grep "scope global dynamic noprefixroute" | grep -c $ddns_ip)
+    exist_local=$(ip addr show br-lan | grep "scope global dynamic noprefixroute" | grep -c "$machine_ip")
+    exist_ddns=$(echo "$ddns_ip" | grep -c "$machine_ip" )
+    exist_ddns_local=$(ip addr show br-lan | grep "scope global dynamic noprefixroute" | grep -c "$ddns_ip")
 fi
 
 if [ "$machine_ip" = "" ]
@@ -300,12 +300,12 @@ then
 fi
 if [ $((exist_ddns)) -gt 0 ]
 then
-    print "skipping ddns \n"
+    echo "skipping ddns"
     exit 1
 else
     if [ $((exist_ddns_local)) -gt 0 ]
     then
-        print "skipping ddns_local \n"
+        echo "skipping ddns_local"
         exit 1
     fi
 fi
@@ -316,13 +316,13 @@ hostname=$(uci get system.@system[0].hostname)
 if [ "$hostname" = "R404" ]; then
     url_name="4.0.4.51:8080"
 elif [ "$hostname" = "R2804" ]; then
-    url_name="tomcat.404.svsoft.fun:404"
+    url_name="28.0.4.20:8848"
 fi
 if [ "$ali_ddns_record_id" = "" ]
 then
     echo "add record starting"
     ali_ddns_record_id=$(add_record | get_record_id)
-    curl -s "http://$url_name/Serv/ddns?domain=$ali_ddns_name&ip=$(enc $machine_ip)"
+    curl -s "http://$url_name/Serv/ddns?domain=$ali_ddns_name&ip=$(enc "$machine_ip")"
     if [ "$ali_ddns_record_id" = "" ]
     then
         ehco "ali_ddns_record_id is empty."
@@ -338,6 +338,6 @@ then
 else
     echo "update record starting"
     update_record "$ali_ddns_record_id"
-    curl -s "http://$url_name/Serv/ddns?domain=$ali_ddns_name&ip=$(enc $machine_ip)"
+    curl -s "http://$url_name/Serv/ddns?domain=$ali_ddns_name&ip=$(enc "$machine_ip")"
     echo "updated record id is:" "$ali_ddns_record_id"
 fi
