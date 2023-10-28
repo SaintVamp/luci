@@ -75,16 +75,20 @@ echo "$ali_ddns_name"
 echo "$ali_ddns_ip_type"
 echo "--------------------"
 function getMachine_IPv4() {
-    /usr/bin/wget -qO- -t1 -T2 http://4.ipw.cn
+    a=$(/usr/bin/wget -qO- -t1 -T2 http://4.ipw.cn)
+    echo "$a"
 }
 function getMachine_IPv42() {
-    /usr/bin/wget -qO- -t1 -T2 https://ipv4.netarm.com/
+    a=$(/usr/bin/wget -qO- -t1 -T2 https://ipv4.netarm.com/)
+    echo "$a"
 }
 function getMachine_IPv6() {
-    /usr/bin/wget -qO- -t1 -T2 http://6.ipw.cn
+    a=$(/usr/bin/wget -qO- -t1 -T2 http://6.ipw.cn)
+    echo "$a"
 }
 function getMachine_IPv62() {
-    /usr/bin/wget -qO- -t1 -T2 https://ipv6.netarm.com/
+    a=$(/usr/bin/wget -qO- -t1 -T2 https://ipv6.netarm.com/)
+    echo "$a"
 }
 function getDDNS_IP() {
     current_ip=$(nslookup -query="$ali_ddns_ip_type" "$ali_ddns_name" "$dns_server"| grep "Address" | grep -v "#53" | grep -v ":53" | awk '{print $2}')
