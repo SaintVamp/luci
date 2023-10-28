@@ -1,0 +1,1 @@
+curl -o /usr/ddns/ddns.sh https://gitee.com/sv_openwrt/luci/raw/openwrt-22.03/applications/luci-app-aliddns/root/usr/ddns/ddns.sh
