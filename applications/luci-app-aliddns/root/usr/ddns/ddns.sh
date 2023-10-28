@@ -324,15 +324,15 @@ echo "start update ddns..."
 #add support */%2A and @/%40 record
 hostname=$(uci get system.@system[0].hostname)
 if [ "$hostname" = "R404" ]; then
-    url_name="4.0.4.51:8080"
+    url_name="4.0.4.51:8080/Serv"
 elif [ "$hostname" = "R2804" ]; then
-    url_name="28.0.4.20:8848"
+    url_name="28.0.4.20:8848/MailServ"
 fi
 if [ "$ali_ddns_record_id" = "" ]
 then
     echo "add record starting"
     ali_ddns_record_id=$(add_record | get_record_id)
-    curl -s "http://$url_name/Serv/ddns?domain=$ali_ddns_name&ip=$(enc "$machine_ip")"
+    curl -s "http://$url_name/ddns?domain=$ali_ddns_name&ip=$(enc "$machine_ip")"
     if [ "$ali_ddns_record_id" = "" ]
     then
         ehco "ali_ddns_record_id is empty."
@@ -348,6 +348,6 @@ then
 else
     echo "update record starting"
     update_record "$ali_ddns_record_id"
-    curl -s "http://$url_name/Serv/ddns?domain=$ali_ddns_name&ip=$(enc "$machine_ip")"
+    curl -s "http://$url_name/ddns?domain=$ali_ddns_name&ip=$(enc "$machine_ip")"
     echo "updated record id is:" "$ali_ddns_record_id"
 fi
