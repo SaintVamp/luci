@@ -269,6 +269,8 @@ then
     if [ ! $(machine_ip) ]
     then
         machine_ip=$(getMachine_IPv42)
+    else
+      echo "machine_ip hasssssss"
     fi
     echo "machine_ip = $machine_ip"
     ali_ddns_record_id=$ali_ddns_ipv4_record_id
@@ -281,6 +283,8 @@ else
     if [ ! $(machine_ip) ]
     then
         machine_ip=$(getMachine_IPv62)
+    else
+      echo "machine_ip hasssssss"
     fi
     echo "machine_ip = $machine_ip"
     ali_ddns_record_id=$ali_ddns_ipv6_record_id
