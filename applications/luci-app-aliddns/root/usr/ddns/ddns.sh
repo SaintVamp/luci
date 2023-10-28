@@ -298,7 +298,8 @@ else
     echo "0"
     exist_ddns=$(echo "$ddns_ip" | grep -c "$machine_ip" )
     echo "1"
-    exist_ddns_local=$($(ip addr show br-lan) | grep "scope global dynamic noprefixroute" | grep -c "$ddns_ip")
+    temp_param=$(ip addr show br-lan)
+    exist_ddns_local=$(echo "$temp_param" | grep "scope global dynamic noprefixroute" | grep -c "$ddns_ip")
     echo "2"
 fi
 
