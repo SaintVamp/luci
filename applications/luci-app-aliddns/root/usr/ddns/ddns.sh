@@ -266,7 +266,7 @@ if [ "$ali_ddns_ip_type" = 'A' ]
 then
     echo "ddns is IPv4."
     machine_ip=$(getMachine_IPv4)
-    if [ $(machine_ip) = "" ]
+    if [ ! $(machine_ip) ]
     then
         machine_ip=$(getMachine_IPv42)
     fi
@@ -278,7 +278,7 @@ then
 else
     echo "ddns is IPv6."
     machine_ip=$(getMachine_IPv6)
-    if [ "$(machine_ip)" = "" ]
+    if [ ! $(machine_ip) ]
     then
         machine_ip=$(getMachine_IPv62)
     fi
