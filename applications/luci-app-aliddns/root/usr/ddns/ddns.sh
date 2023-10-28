@@ -292,10 +292,10 @@ else
     temp_param=$(ip addr show br-lan)
     exist_local=$(echo "$temp_param" | grep "scope global dynamic noprefixroute" | grep "$machine_ip"| wc -l)
     echo "0"
-    exist_ddns=`echo "$ddns_ip" | grep -c "$machine_ip"`
+    exist_ddns=$(echo "$ddns_ip" | grep "$machine_ip"| wc -l)
     echo "1"
     temp_param=$(ip addr show br-lan)
-    exist_ddns_local=$(echo "$temp_param" | grep "scope global dynamic noprefixroute" | grep -c "$ddns_ip")
+    exist_ddns_local=$(echo "$temp_param" | grep "scope global dynamic noprefixroute" | grep "$ddns_ip"| wc -l)
     echo "2"
 fi
 
