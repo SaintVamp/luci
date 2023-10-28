@@ -269,8 +269,6 @@ then
     if [ "$machine_ip" = "" ]
     then
         machine_ip=$(getMachine_IPv42)
-    else
-      echo "machine_ip hasssssss"
     fi
     echo "machine_ip = $machine_ip"
     ali_ddns_record_id=$ali_ddns_ipv4_record_id
@@ -283,20 +281,12 @@ else
     if [ "$machine_ip" = "" ]
     then
         machine_ip=$(getMachine_IPv62)
-    else
-      echo "machine_ip hasssssss"
     fi
     echo "machine_ip = $machine_ip"
     ali_ddns_record_id=$ali_ddns_ipv6_record_id
-    echo "-1"
-    temp_param=$(ip addr show br-lan)
-    exist_local=$(echo "$temp_param" | grep "scope global dynamic noprefixroute" | grep "$machine_ip"| wc -l)
-    echo "0"
+    exist_local=$(ip addr show br-lan | grep "scope global dynamic noprefixroute" | grep "$machine_ip"| wc -l)
     exist_ddns=$(echo "$ddns_ip" | grep "$machine_ip"| wc -l)
-    echo "1"
-    temp_param=$(ip addr show br-lan)
-    exist_ddns_local=$(echo "$temp_param" | grep "scope global dynamic noprefixroute" | grep "$ddns_ip"| wc -l)
-    echo "2"
+    exist_ddns_local=$(ip addr show br-lan | grep "scope global dynamic noprefixroute" | grep "$ddns_ip"| wc -l)
 fi
 
 if [ "$machine_ip" = "" ]
