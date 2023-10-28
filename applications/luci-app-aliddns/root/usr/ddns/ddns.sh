@@ -90,10 +90,6 @@ function getMachine_IPv62() {
     a=$(/usr/bin/wget -qO- -t1 -T2 https://ipv6.netarm.com/)
     echo "$a"
 }
-function getDDNS_IP() {
-    current_ip=$(nslookup -query="$ali_ddns_ip_type" "$ali_ddns_name" "$dns_server"| grep "Address" | grep -v "#53" | grep -v ":53" | awk '{print $2}')
-    echo "$current_ip"
-}
 function getJsonValuesByAwk() {
     awk -v json="$1" -v key="$2" -v defaultValue="$3" 'BEGIN{
         foundKeyCount = 0
@@ -264,7 +260,7 @@ then
     fi
 fi
 
-ddns_ip=$(getDDNS_IP)
+ddns_ip=$(nslookup -query="$ali_ddns_ip_type" "$ali_ddns_name" "$dns_server"| grep "Address" | grep -v "#53" | grep -v ":53" | awk '{print $2}')
 echo "ddns_ip = $ddns_ip"
 if [ "$ali_ddns_ip_type" = 'A' ]
 then
