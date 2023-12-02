@@ -8,7 +8,7 @@ include $(TOPDIR)/rules.mk
 PKG_NAME:=luci-app-socat
 
 LUCI_TITLE:=LuCI support for Socat
-LUCI_DEPENDS:=+socat +luci-compat
+LUCI_DEPENDS:=+socat +luci +luci-compat
 
 define Package/$(PKG_NAME)/conffiles
 /etc/config/socatui
