@@ -28,6 +28,7 @@ crontab -r
 crontab $cron_file
 $(echo "0 0 * * * /bin/bash /usr/sv/book/init-book.sh" >> $cron_file)
 $(echo "*/20 * * * * /bin/bash /usr/sv/rss/init-rss.sh" >> $cron_file)
+$(echo "*/5 * * * * /bin/bash /usr/sv/checkpppoe.sh" >> $cron_file)
 crontab -r
 crontab $cron_file
 /bin/bash /usr/sv/nginx/init-nginx.sh
