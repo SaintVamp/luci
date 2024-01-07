@@ -57,7 +57,16 @@ dns_server=$7
 #--------------------------------------------------------------
 #--------------------------------------------------------------
 
-
+#创建临时文件
+if [ ! -e /usr/ddns/temp_ip ]; then
+    touch /usr/ddns/temp_ip
+fi
+hostname=$(uci get system.@system[0].hostname)
+if [ "$hostname" = "R404" ]; then
+    url_name="4.0.4.51:8080/Serv"
+elif [ "$hostname" = "R2804" ]; then
+    url_name="28.0.4.20:8848/MailServ"
+fi
 machine_ip=""
 ddns_ip=""
 ali_ddns_record_id=""
@@ -74,6 +83,15 @@ echo "$now"
 echo "$ali_ddns_name"
 echo "$ali_ddns_ip_type"
 echo "--------------------"
+function get_temp_ip() {
+    a=$(cat /usr/ddns/temp_ip)
+    echo "$a"
+}
+function set_temp_ip() {
+    $(rm -rf /usr/ddns/temp_ip)
+    $(echo "$machine_ip" > /usr/ddns/temp_ip)
+    curl -s "http://$url_name/ddns?domain=$ali_ddns_name&ip=$(enc "$machine_ip")"
+}
 function getMachine_IPv4() {
     a=$(/usr/bin/wget -qO- -t1 -T2 http://4.ipw.cn)
     echo "$a"
@@ -289,6 +307,13 @@ else
     exist_ddns_local=$(ip addr show br-lan | grep "scope global dynamic noprefixroute" | grep "$ddns_ip"| wc -l)
 fi
 
+txt_ip=$(get_temp_ip)
+if [ "$machine_ip" = "$txt_ip" ]
+then
+    echo "machine_ip same with txt_ip"
+else
+    set_temp_ip
+fi
 if [ "$machine_ip" = "" ]
 then
     echo "machine_ip is empty!"
@@ -312,12 +337,7 @@ fi
 echo "start update ddns..."
 
 #add support */%2A and @/%40 record
-hostname=$(uci get system.@system[0].hostname)
-if [ "$hostname" = "R404" ]; then
-    url_name="4.0.4.51:8080/Serv"
-elif [ "$hostname" = "R2804" ]; then
-    url_name="28.0.4.20:8848/MailServ"
-fi
+
 if [ "$ali_ddns_record_id" = "" ]
 then
     echo "add record starting"
