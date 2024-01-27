@@ -280,6 +280,7 @@ fi
 
 ddns_ip=$(nslookup -query="$ali_ddns_ip_type" "$ali_ddns_name" "$dns_server"| grep "Address" | grep -v "#53" | grep -v ":53" | awk '{print $2}')
 echo "ddns_ip = $ddns_ip"
+
 if [ "$ali_ddns_ip_type" = 'A' ]
 then
     echo "ddns is IPv4."
@@ -306,7 +307,9 @@ else
     exist_ddns=$(echo "$ddns_ip" | grep "$machine_ip"| wc -l)
     exist_ddns_local=$(ip addr show br-lan | grep "scope global dynamic noprefixroute" | grep "$ddns_ip"| wc -l)
 fi
-
+echo "exist_ddns_local = $exist_ddns_local"
+echo "exist_local = $exist_local"
+echo "exist_ddns = $exist_ddns"
 txt_ip=$(get_temp_ip)
 if [ "$machine_ip" = "$txt_ip" ]
 then
@@ -314,7 +317,7 @@ then
 else
     set_temp_ip
 fi
-if [ "$machine_ip" = "" ]
+if [ -z "$machine_ip" ]
 then
     echo "machine_ip is empty!"
     exit 0
@@ -328,7 +331,7 @@ then
     echo "skipping ddns"
     exit 1
 else
-    if [ $((exist_ddns_local)) -gt 0 ]
+    if [ $((exist_ddns_local)) -gt 0 ] && [ -n "$ddns_ip" ]
     then
         echo "skipping ddns_local"
         exit 1
@@ -338,14 +341,14 @@ echo "start update ddns..."
 
 #add support */%2A and @/%40 record
 
-if [ "$ali_ddns_record_id" = "" ]
+if [ -z "$ali_ddns_record_id" ]
 then
     echo "add record starting"
     ali_ddns_record_id=$(add_record | get_record_id)
     curl -s "http://$url_name/ddns?domain=$ali_ddns_name&ip=$(enc "$machine_ip")"
-    if [ "$ali_ddns_record_id" = "" ]
+    if [ -z "$ali_ddns_record_id" ]
     then
-        ehco "ali_ddns_record_id is empty."
+        echo "ali_ddns_record_id is empty."
     else
         if [ "$ali_ddns_ip_type" = 'A' ]
         then
