@@ -65,7 +65,7 @@ hostname=$(uci get system.@system[0].hostname)
 if [ "$hostname" = "R404" ]; then
     url_name="4.0.4.51:8080/Serv"
 elif [ "$hostname" = "R2804" ]; then
-    url_name="28.0.4.20:8848/MailServ"
+    url_name="28.0.4.22:8080/MailServ"
 fi
 machine_ip=""
 ddns_ip=""
