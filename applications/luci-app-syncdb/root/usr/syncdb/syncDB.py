@@ -17,7 +17,7 @@ def setSyncTS(cursor):
 
 
 def syncDb():
-    db = pymysql.connect(host="4.0.4.52", port=7848, user="sv", password="sv@8004", db="SV", charset='utf8')
+    db = pymysql.connect(host="404.svsoft.fun", port=45004, user="sv", password="sv@8004", db="SV", charset='utf8')
     cursor = db.cursor()
     # myclient = pymongo.MongoClient("mongodb://svtool:12086F465CEB74B3BD676C39DA07900C@39.100.245.149:30000/SV?mechanism=SCRAM-SHA-1")
     # myclient = pymongo.MongoClient(host="39.100.245.149", port=30000,username="svtool",password="12086F465CEB74B3BD676C39DA07900C")

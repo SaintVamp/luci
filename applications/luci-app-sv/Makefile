@@ -7,7 +7,7 @@
 include $(TOPDIR)/rules.mk
 
 LUCI_TITLE:=SV need software
-LUCI_DEPENDS:=+coreutils +coreutils-nohup +nginx-all-module
+LUCI_DEPENDS:= +nginx-all-module
 PKG_NAME:=luci-app-sv
 
 include ../../luci.mk

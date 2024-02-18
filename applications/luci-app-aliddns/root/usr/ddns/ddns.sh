@@ -280,7 +280,6 @@ fi
 
 ddns_ip=$(nslookup -query="$ali_ddns_ip_type" "$ali_ddns_name" "$dns_server"| grep "Address" | grep -v "#53" | grep -v ":53" | awk '{print $2}')
 echo "ddns_ip = $ddns_ip"
-
 if [ "$ali_ddns_ip_type" = 'A' ]
 then
     echo "ddns is IPv4."
