@@ -23,7 +23,6 @@ run_service() {
 	config_get DnsServer $1 DnsServer
 
 	echo "*/5 * * * * /bin/bash /usr/ddns/ddns.sh $AccessKeyId $AccessKeySecret $Subdomain $Domain $Iptype $TTL $DnsServer" >> /usr/ddns/cronfile
-  echo "*/5 * * * * /bin/bash /usr/nginx/checkpppoe.sh" >> /usr/ddns/cronfile
 }
 conf_set(){
   keyword="ddns"
