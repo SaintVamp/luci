@@ -35,6 +35,7 @@ return view.extend({
         o = s.option(form.ListValue, "Subdomain", _("Subdomain"),
             _("Type in resolve subdomain."));
         o.value("404", _("404"));
+        o.value("207", _("207"));
         o.value("2804", _("2804"));
         o.default = "404";
         o.rmempty = false;
