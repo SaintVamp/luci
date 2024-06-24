@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"PO-Revision-Date: 2024-02-02 18:54+0000\n"
+"PO-Revision-Date: 2024-05-26 23:47+0000\n"
 "Last-Translator: Džiugas J <dziugas1959@hotmail.com>\n"
 "Language-Team: Lithuanian <https://hosted.weblate.org/projects/openwrt/"
 "luciapplicationsstatistics/lt/>\n"
@@ -9,10 +9,9 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=3; plural=(n % 10 == 1 && (n % 100 < 11 || n % 100 > "
-"19)) ? 0 : ((n % 10 >= 2 && n % 10 <= 9 && (n % 100 < 11 || n % 100 > 19)) ? "
-"1 : 2);\n"
-"X-Generator: Weblate 5.4-dev\n"
+"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && "
+"(n%100<10 || n%100>=20) ? 1 : 2);\n"
+"X-Generator: Weblate 5.6-dev\n"
 
 #: applications/luci-app-statistics/htdocs/luci-static/resources/statistics/rrdtool/definitions/apcups.js:7
 #: applications/luci-app-statistics/root/usr/share/luci/statistics/plugins/apcups.json:2
@@ -324,7 +323,7 @@ msgstr "Įjungti šį plėtinį"
 
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/collectd.js:113
 msgid "Enabled"
-msgstr "Įjungta/-as"
+msgstr "Įjungta/Įgalinta (-as/-i)"
 
 #: applications/luci-app-statistics/htdocs/luci-static/resources/statistics/rrdtool/definitions/entropy.js:10
 #: applications/luci-app-statistics/root/usr/share/luci/statistics/plugins/entropy.json:2
@@ -341,7 +340,7 @@ msgstr "Entropijos stebėjimas įjungtas"
 
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/graphs.js:206
 msgid "Every 30 seconds"
-msgstr "Kas 30 sekundžių"
+msgstr "Kas 30-imt sekundžių"
 
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/graphs.js:205
 msgid "Every 5 seconds"
@@ -469,11 +468,13 @@ msgstr "Skleidėjas/P.k – Vedėjas operuoja/vykdo „chrony“"
 
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/collectd.js:51
 msgid "Hostname"
-msgstr "Įrenginio pavadinimas"
+msgstr "Įrenginio (t.y skleidėjo/p.k – vedėjo) pavadinimas"
 
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/olsrd.js:15
 msgid "IP or hostname where to get the txtinfo output from"
-msgstr "IP arba įrenginio pavadinimas, iš kur gauti „txtinfo“ išvestį iš"
+msgstr ""
+"IP arba įrenginio (t.y skleidėjo/p.k – vedėjo) pavadinimas, iš kur gauti "
+"„txtinfo“ išvestį iš"
 
 #: applications/luci-app-statistics/htdocs/luci-static/resources/statistics/rrdtool/definitions/ipstatistics.js:7
 #: applications/luci-app-statistics/root/usr/share/luci/statistics/plugins/ipstatistics.json:2
@@ -542,7 +543,7 @@ msgstr "Laukiamo prisijungimo/jungties ryšio skleidėjas/p.k – vedėjas"
 
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/network.js:44
 msgid "Listen port"
-msgstr "Laukiamo prisijungimo/jungties ryšio prievadas"
+msgstr "Laukti (-iama/-s) prisijungimo/jungties ryšio prievadui"
 
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/network.js:32
 msgid "Listener interfaces"
@@ -1384,8 +1385,8 @@ msgid ""
 "The iwinfo plugin collects statistics about wireless signal strength, noise "
 "and quality."
 msgstr ""
-"„Iwinfo“ papildinys renka statistiką apie belaidžio ryšio signalo stiprumą, "
-"triukšmą ir kokybę."
+"„Iwinfo“ papildinys renka statistiką apie belaidžio/bevielio ryšio signalo "
+"stiprumą, triukšmą ir kokybę."
 
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/load.js:7
 msgid "The load plugin collects statistics about the general system load."
@@ -1541,7 +1542,9 @@ msgstr "Pasibaigusios užklausos laikas apklausiant „chrony“"
 
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/collectd.js:80
 msgid "Try to look up fully qualified hostname"
-msgstr "Pabandykite surasti/paieškoti pilnai kvalifikuotą Įrenginio pavadinimą"
+msgstr ""
+"Pabandykite surasti/paieškoti pilnai kvalifikuotą įrenginio (t.y skleidėjo/p."
+"k – vedėjo) pavadinimą"
 
 #: applications/luci-app-statistics/htdocs/luci-static/resources/statistics/rrdtool/definitions/nut.js:7
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/nut.js:14
@@ -1634,11 +1637,11 @@ msgstr "Kai nustatyta į „true“, prašome procentinių reikšmių"
 #: applications/luci-app-statistics/htdocs/luci-static/resources/statistics/rrdtool/definitions/iwinfo.js:7
 #: applications/luci-app-statistics/root/usr/share/luci/statistics/plugins/iwinfo.json:2
 msgid "Wireless"
-msgstr "Belaidis"
+msgstr "Belaidis/Bevielis"
 
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/iwinfo.js:7
 msgid "Wireless iwinfo Plugin Configuration"
-msgstr "Belaidžio „iwinfo“ papildinio konfigūracija"
+msgstr "Belaidžio/Bevielio „iwinfo“ papildinio konfigūracija"
 
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/rrdtool.js:97
 msgid "Writing *.rrd files to %s"
@@ -1675,7 +1678,7 @@ msgstr "nėra santraukos"
 
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/collectd.js:139
 msgid "none"
-msgstr "joks"
+msgstr "joks (-ia/-ie)"
 
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/df.js:107
 msgid "one device"

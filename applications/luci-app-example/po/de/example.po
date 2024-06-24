@@ -4,15 +4,15 @@
 #
 msgid ""
 msgstr ""
-"PO-Revision-Date: 2022-10-22 18:07+0000\n"
-"Last-Translator: ssantos <ssantos@web.de>\n"
+"PO-Revision-Date: 2024-04-18 14:03+0000\n"
+"Last-Translator: CSoellinger <zerogiven@gmail.com>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/openwrt/"
 "luciapplicationsexample/de/>\n"
 "Language: de\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 4.14.2-dev\n"
+"X-Generator: Weblate 5.5-dev\n"
 
 #: applications/luci-app-example/htdocs/luci-static/resources/view/example/form.js:38
 msgid "A boolean option"
@@ -24,11 +24,11 @@ msgstr "Eine Auswahloption"
 
 #: applications/luci-app-example/htdocs/luci-static/resources/view/example/rpc.js:56
 msgid "Cats"
-msgstr ""
+msgstr "Katzen"
 
 #: applications/luci-app-example/htdocs/luci-static/resources/view/example/rpc-jsonmap-tablesection.js:73
 msgid "Description for this table section"
-msgstr ""
+msgstr "Beschreibung für diesen Tabellenteil"
 
 #: applications/luci-app-example/htdocs/luci-static/resources/view/example/rpc-jsonmap-typedsection.js:73
 msgid "Description for this typed section"
@@ -36,7 +36,7 @@ msgstr ""
 
 #: applications/luci-app-example/htdocs/luci-static/resources/view/example/rpc.js:57
 msgid "Dogs"
-msgstr ""
+msgstr "Hunde"
 
 #: applications/luci-app-example/htdocs/luci-static/resources/view/example/form.js:55
 msgid "Dynamic list option"
@@ -88,7 +88,7 @@ msgstr "Eingabe für die erste Option"
 
 #: applications/luci-app-example/htdocs/luci-static/resources/view/example/rpc.js:60
 msgid "Is this real?"
-msgstr ""
+msgstr "Ist das real?"
 
 #: applications/luci-app-example/htdocs/luci-static/resources/view/example/rpc.js:130
 msgid "JSON converted to table via array building and loop"
@@ -104,11 +104,11 @@ msgstr ""
 
 #: applications/luci-app-example/htdocs/luci-static/resources/view/example/rpc.js:60
 msgid "No"
-msgstr ""
+msgstr "Nein"
 
 #: applications/luci-app-example/htdocs/luci-static/resources/view/example/rpc.js:87
 msgid "Not found"
-msgstr ""
+msgstr "Nicht gefunden"
 
 #: applications/luci-app-example/htdocs/luci-static/resources/view/example/rpc-jsonmap-tablesection.js:74
 #: applications/luci-app-example/htdocs/luci-static/resources/view/example/rpc-jsonmap-typedsection.js:74
@@ -166,7 +166,7 @@ msgstr ""
 
 #: applications/luci-app-example/htdocs/luci-static/resources/view/example/rpc.js:60
 msgid "Yes"
-msgstr ""
+msgstr "Ja"
 
 #: applications/luci-app-example/htdocs/luci-static/resources/view/example/form.js:28
 msgid "first section"

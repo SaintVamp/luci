@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"PO-Revision-Date: 2024-02-01 22:49+0000\n"
+"PO-Revision-Date: 2024-03-02 13:14+0000\n"
 "Last-Translator: Matthaiks <kitynska@gmail.com>\n"
 "Language-Team: Polish <https://hosted.weblate.org/projects/openwrt/"
 "luciapplicationscloudflared/pl/>\n"
@@ -11,7 +11,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n==1 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 "
 "|| n%100>=20) ? 1 : 2);\n"
-"X-Generator: Weblate 5.4-dev\n"
+"X-Generator: Weblate 5.5-dev\n"
 
 #: applications/luci-app-cloudflared/htdocs/luci-static/resources/view/cloudflared/log.js:89
 msgid "All"
@@ -42,9 +42,14 @@ msgstr "Ścieżka pliku konfiguracyjnego"
 msgid "Configuration"
 msgstr "Konfiguracja"
 
-#: applications/luci-app-cloudflared/htdocs/luci-static/resources/view/cloudflared/tunnels.js:55
+#: applications/luci-app-cloudflared/htdocs/luci-static/resources/view/cloudflared/tunnels.js:76
+msgid "Connection ID"
+msgstr "Identyfikator połączenia"
+
+#: applications/luci-app-cloudflared/htdocs/luci-static/resources/view/cloudflared/tunnels.js:54
+#: applications/luci-app-cloudflared/htdocs/luci-static/resources/view/cloudflared/tunnels.js:90
 msgid "Connections"
-msgstr ""
+msgstr "Połączenia"
 
 #: applications/luci-app-cloudflared/htdocs/luci-static/resources/view/cloudflared/config.js:41
 msgid ""
@@ -54,9 +59,13 @@ msgstr ""
 "Twórz swoją sieć i zarządzaj nią na pulpicie nawigacyjnym <a %s>Cloudflare "
 "Zero Trust</a>."
 
-#: applications/luci-app-cloudflared/htdocs/luci-static/resources/view/cloudflared/tunnels.js:62
-msgid "Data center"
-msgstr ""
+#: applications/luci-app-cloudflared/htdocs/luci-static/resources/view/cloudflared/tunnels.js:53
+msgid "Created At"
+msgstr "Utworzono"
+
+#: applications/luci-app-cloudflared/htdocs/luci-static/resources/view/cloudflared/tunnels.js:79
+msgid "Data Center"
+msgstr "Centrum danych"
 
 #: applications/luci-app-cloudflared/htdocs/luci-static/resources/view/cloudflared/config.js:97
 msgid "Debug"
@@ -91,6 +100,10 @@ msgstr "Poziom filtra:"
 msgid "Grant access to Cloudflared configuration"
 msgstr "Udziel dostępu do konfiguracji Cloudflared"
 
+#: applications/luci-app-cloudflared/htdocs/luci-static/resources/view/cloudflared/tunnels.js:52
+msgid "ID"
+msgstr "Identyfikator"
+
 #: applications/luci-app-cloudflared/htdocs/luci-static/resources/view/cloudflared/config.js:96
 #: applications/luci-app-cloudflared/htdocs/luci-static/resources/view/cloudflared/log.js:90
 msgid "Info"
@@ -107,11 +120,15 @@ msgstr "Kierunek dziennika:"
 
 #: applications/luci-app-cloudflared/htdocs/luci-static/resources/view/cloudflared/config.js:92
 msgid "Logging level"
-msgstr "Poziom debugowania"
+msgstr "Poziom rejestrowania"
 
-#: applications/luci-app-cloudflared/htdocs/luci-static/resources/view/cloudflared/tunnels.js:69
+#: applications/luci-app-cloudflared/htdocs/luci-static/resources/view/cloudflared/tunnels.js:51
+msgid "Name"
+msgstr "Nazwa"
+
+#: applications/luci-app-cloudflared/htdocs/luci-static/resources/view/cloudflared/tunnels.js:85
 msgid "No connections"
-msgstr ""
+msgstr "Brak połączeń"
 
 #: applications/luci-app-cloudflared/htdocs/luci-static/resources/view/cloudflared/config.js:55
 msgid "Not Running"
@@ -121,13 +138,13 @@ msgstr "Nieuruchomione"
 msgid "Obtain a certificate <a %s>here</a>."
 msgstr "Uzyskaj certyfikat <a %s>tutaj</a>."
 
-#: applications/luci-app-cloudflared/htdocs/luci-static/resources/view/cloudflared/tunnels.js:61
+#: applications/luci-app-cloudflared/htdocs/luci-static/resources/view/cloudflared/tunnels.js:78
 msgid "Opened At"
-msgstr ""
+msgstr "Otworzono"
 
-#: applications/luci-app-cloudflared/htdocs/luci-static/resources/view/cloudflared/tunnels.js:60
+#: applications/luci-app-cloudflared/htdocs/luci-static/resources/view/cloudflared/tunnels.js:77
 msgid "Origin IP"
-msgstr ""
+msgstr "Pochodzenie IP"
 
 #: applications/luci-app-cloudflared/htdocs/luci-static/resources/view/cloudflared/config.js:86
 msgid "Region"
@@ -166,10 +183,14 @@ msgstr "Po utworzeniu tunelu token tunelu pojawi się na pulpicie nawigacyjnym."
 msgid "Token"
 msgstr "Token"
 
-#: applications/luci-app-cloudflared/htdocs/luci-static/resources/view/cloudflared/tunnels.js:82
+#: applications/luci-app-cloudflared/htdocs/luci-static/resources/view/cloudflared/tunnels.js:96
 #: applications/luci-app-cloudflared/root/usr/share/luci/menu.d/luci-app-cloudflared.json:22
 msgid "Tunnels"
-msgstr ""
+msgstr "Tunele"
+
+#: applications/luci-app-cloudflared/htdocs/luci-static/resources/view/cloudflared/tunnels.js:48
+msgid "Tunnels Information"
+msgstr "Informacje o tunelach"
 
 #: applications/luci-app-cloudflared/htdocs/luci-static/resources/view/cloudflared/log.js:33
 msgid "Unable to read the interface info from /var/log/cloudflared.log."

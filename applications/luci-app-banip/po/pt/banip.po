@@ -1,6 +1,6 @@
 msgid ""
 msgstr ""
-"PO-Revision-Date: 2024-01-08 01:06+0000\n"
+"PO-Revision-Date: 2024-03-23 00:13+0000\n"
 "Last-Translator: ssantos <ssantos@web.de>\n"
 "Language-Team: Portuguese <https://hosted.weblate.org/projects/openwrt/"
 "luciapplicationsbanip/pt/>\n"
@@ -8,7 +8,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n > 1;\n"
-"X-Generator: Weblate 5.4-dev\n"
+"X-Generator: Weblate 5.5-dev\n"
 
 #: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/setreport.js:75
 msgid "-- Set Selection --"
@@ -737,7 +737,7 @@ msgstr "Elementos do relatório"
 
 #: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/overview.js:225
 msgid "Restart"
-msgstr "Reiniciar"
+msgstr ""
 
 #: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/overview.js:641
 msgid "Restrict the internet access from/to a small number of secure IPs."
@@ -1114,7 +1114,7 @@ msgstr "reiniciar"
 
 #: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/overview.js:315
 msgid "start (default)"
-msgstr "iniciar (padrão)"
+msgstr "iniciar"
 
 #: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/overview.js:488
 msgid "warn (default)"
