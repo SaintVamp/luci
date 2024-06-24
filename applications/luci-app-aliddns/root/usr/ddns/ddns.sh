@@ -63,9 +63,11 @@ if [ ! -e /usr/ddns/temp_ip ]; then
 fi
 hostname=$(uci get system.@system[0].hostname)
 if [ "$hostname" = "R404" ]; then
-    url_name="4.0.4.51:8080/Serv"
+    url_name="10.0.4.51:8080/Serv"
 elif [ "$hostname" = "R2804" ]; then
-    url_name="28.0.4.22:8080/MailServ"
+    url_name="10.0.28.22:8080/MailServ"
+elif [ "$hostname" = "R207" ]; then
+    url_name="10.0.2.22:8080/MailServ"
 fi
 machine_ip=""
 ddns_ip=""
@@ -84,12 +86,12 @@ echo "$ali_ddns_name"
 echo "$ali_ddns_ip_type"
 echo "--------------------"
 function get_temp_ip() {
-    a=$(cat /usr/ddns/temp_ip)
+    a=$(cat /usr/ddns/$ali_ddns_name)
     echo "$a"
 }
 function set_temp_ip() {
-    $(rm -rf /usr/ddns/temp_ip)
-    $(echo "$machine_ip" > /usr/ddns/temp_ip)
+    $(rm -rf /usr/ddns/$ali_ddns_name)
+    $(echo "$machine_ip" > /usr/ddns/$ali_ddns_name)
     curl -s "http://$url_name/ddns?domain=$ali_ddns_name&ip=$(enc "$machine_ip")"
 }
 function getMachine_IPv4() {
@@ -197,7 +199,7 @@ function add_record() {
 if [ "$ali_ddns_record_id" = "" ]
 then
     ali_ddns_record_id=$(query_record_id)
-#    echo "---------ali_ddns_record_id-------" $ali_ddns_record_id "\n"
+    echo "---------ali_ddns_record_id-------" $ali_ddns_record_id "\n"
     record_id_num=$(getJsonValuesByAwk "$ali_ddns_record_id" "TotalCount" "defaultValue")
     record_ids=$(getJsonValuesByAwk "$ali_ddns_record_id" "RecordId" "defaultValue" | tr -d '\n')
     record_ids=${record_ids//\"\"/\" \"}
@@ -309,21 +311,10 @@ fi
 echo "exist_ddns_local = $exist_ddns_local"
 echo "exist_local = $exist_local"
 echo "exist_ddns = $exist_ddns"
-txt_ip=$(get_temp_ip)
-if [ "$machine_ip" = "$txt_ip" ]
-then
-    echo "machine_ip same with txt_ip"
-else
-    set_temp_ip
-fi
 if [ -z "$machine_ip" ]
 then
     echo "machine_ip is empty!"
     exit 0
-fi
-if [ $((exist_local)) -eq 0 ]
-then
-    echo "machine_ip is error"
 fi
 if [ $((exist_ddns)) -gt 0 ]
 then
@@ -336,6 +327,19 @@ else
         exit 1
     fi
 fi
+if [ $((exist_local)) -eq 0 ]
+then
+    echo "machine_ip is error"
+    exit 1
+fi
+txt_ip=$(get_temp_ip)
+if [ "$machine_ip" = "$txt_ip" ]
+then
+    echo "machine_ip same with txt_ip"
+    exit 1
+else
+    set_temp_ip
+fi
 echo "start update ddns..."
 
 #add support */%2A and @/%40 record
@@ -344,7 +348,6 @@ if [ -z "$ali_ddns_record_id" ]
 then
     echo "add record starting"
     ali_ddns_record_id=$(add_record | get_record_id)
-    curl -s "http://$url_name/ddns?domain=$ali_ddns_name&ip=$(enc "$machine_ip")"
     if [ -z "$ali_ddns_record_id" ]
     then
         echo "ali_ddns_record_id is empty."
@@ -360,6 +363,5 @@ then
 else
     echo "update record starting"
     update_record "$ali_ddns_record_id"
-    curl -s "http://$url_name/ddns?domain=$ali_ddns_name&ip=$(enc "$machine_ip")"
     echo "updated record id is:" "$ali_ddns_record_id"
 fi
