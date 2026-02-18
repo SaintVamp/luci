@@ -206,11 +206,8 @@ record_ids=${record_ids//\"\"/\" \"}
 record_ids=${record_ids//\"/}
 # 直接执行nslookup
 nslookup_result=$(nslookup -query="$ali_ddns_ip_type" "$ali_ddns_name" "$dns_server" 2>&1)
-echo "nslookup完整结果: $nslookup_result"
-
 ddns_ip_raw=$(echo "$nslookup_result" | grep "Address" | grep -v "#53" | grep -v ":53" | awk '{print $2}')
 echo "ddns_ip_raw = $ddns_ip_raw"
-
 # 确保即使DNS查询失败也能继续执行
 echo "处理DNS查询结果..."
 if [ -z "$ddns_ip_raw" ]; then
