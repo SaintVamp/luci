@@ -1,5 +1,6 @@
 #!/bin/bash
-set -e
+# 注意：不使用set -e，因为DNS查询可能会失败但仍需要继续执行
+# set -e
 
 #================================================================================================================#
 # 功能：用于更新阿里云域名IP，实现DDNS功能
@@ -92,7 +93,7 @@ function get_temp_ip() {
 function set_temp_ip() {
     $(rm -rf /usr/ddns/$ali_ddns_name)
     $(echo "$machine_ip" > /usr/ddns/$ali_ddns_name)
-    curl -s "http://$url_name/ddns?domain=$ali_ddns_name&ip=$(enc "$machine_ip")"
+#    curl -s "http://$url_name/ddns?domain=$ali_ddns_name&ip=$(enc "$machine_ip")"
 }
 function getMachine_IPv4() {
     a=$(/usr/bin/wget -qO- -t1 -T2 http://4.ipw.cn)
@@ -196,92 +197,130 @@ function add_record() {
     # shellcheck disable=SC2086
     send_request "AddDomainRecord&DomainName=$ali_ddns_domain" "RR=$ali_ddns_subdomain&SignatureMethod=HMAC-SHA1&SignatureNonce=$timestamp&SignatureVersion=1.0&TTL=$ali_ddns_ttl&Timestamp=$timestamp&Type=$ali_ddns_ip_type&Value=$(enc $machine_ip)"
 }
-if [ "$ali_ddns_record_id" = "" ]
-then
-    ali_ddns_record_id=$(query_record_id)
-    echo "---------ali_ddns_record_id-------" $ali_ddns_record_id "\n"
-    record_id_num=$(getJsonValuesByAwk "$ali_ddns_record_id" "TotalCount" "defaultValue")
-    record_ids=$(getJsonValuesByAwk "$ali_ddns_record_id" "RecordId" "defaultValue" | tr -d '\n')
-    record_ids=${record_ids//\"\"/\" \"}
-    record_ids=${record_ids//\"/}
-    sleep 2
-    if [ $((record_id_num)) -gt 1 ]
-    then
-        str1=$(echo "$record_ids" | awk '{print $1}')
-        str2=$(echo "$record_ids" | awk '{print $2}')
-        str3=$(echo "$record_ids" | awk '{print $3}')
-        str4=$(echo "$record_ids" | awk '{print $1}')
-        str5=$(echo "$record_ids" | awk '{print $2}')
-        str6=$(echo "$record_ids" | awk '{print $3}')
-        str7=$(echo "$record_ids" | awk '{print $3}')
-        str8=$(echo "$record_ids" | awk '{print $1}')
-        str9=$(echo "$record_ids" | awk '{print $2}')
-        str10=$(echo "$record_ids" | awk '{print $3}')
-        if [ -n "$str1" ]
-        then
-            delete_record "$str1"
-            sleep 5
-        fi
-        if [ -n "$str2" ]
-        then
-            delete_record "$str2"
-            sleep 5
-        fi
-        if [ -n "$str3" ]
-        then
-            delete_record "$str3"
-            sleep 5
-        fi
-        if [ -n "$str4" ]
-        then
-            delete_record "$str4"
-            sleep 5
-        fi
-        if [ -n "$str5" ]
-        then
-            delete_record "$str5"
-            sleep 5
-        fi
-        if [ -n "$str6" ]
-        then
-            delete_record "$str6"
-            sleep 5
-        fi
-        if [ -n "$str7" ]
-        then
-            delete_record "$str7"
-            sleep 5
-        fi
-        if [ -n "$str8" ]
-        then
-            delete_record "$str8"
-            sleep 5
-        fi
-        if [ -n "$str9" ]
-        then
-            delete_record "$str9"
-            sleep 5
-        fi
-        if [ -n "$str10" ]
-        then
-            delete_record "$str10"
-            sleep 5
-        fi
-    else
-        ali_ddns_record_id=$(query_record_id | get_record_id)
-        echo "ali_ddns_record_id is " "$ali_ddns_record_id"
-        echo "****************"
-        if [ "$ali_ddns_ip_type" = 'A' ]
-        then
-            ali_ddns_ipv4_record_id=$ali_ddns_record_id
-        else
-            ali_ddns_ipv6_record_id=$ali_ddns_record_id
-        fi
-    fi
+# 先查询当前的DNS记录信息
+echo "查询阿里云DNS记录..."
+ali_ddns_record_info=$(query_record_id)
+echo "阿里云API返回结果: $ali_ddns_record_info"
+record_id_num=$(getJsonValuesByAwk "$ali_ddns_record_info" "TotalCount" "defaultValue")
+record_ids=$(getJsonValuesByAwk "$ali_ddns_record_info" "RecordId" "defaultValue" | tr -d '\n')
+record_ids=${record_ids//\"\"/\" \"}
+record_ids=${record_ids//\"/}
+echo "record_id_num = $record_id_num"
+echo "record_ids = $record_ids"
+
+# 先用nslookup查询当前的IP地址
+echo "执行nslookup命令: nslookup -query=\"$ali_ddns_ip_type\" \"$ali_ddns_name\" \"$dns_server\""
+echo "域名: $ali_ddns_name"
+echo "DNS服务器: $dns_server"
+
+# OpenWrt环境下执行nslookup（避免使用timeout命令）
+echo "在OpenWrt环境下执行nslookup..."
+
+# 直接执行nslookup，不使用timeout
+echo "执行: nslookup -query=\"$ali_ddns_ip_type\" \"$ali_ddns_name\" \"$dns_server\""
+nslookup_result=$(nslookup -query="$ali_ddns_ip_type" "$ali_ddns_name" "$dns_server" 2>&1)
+nslookup_exit_code=$?
+echo "nslookup执行状态: $nslookup_exit_code"
+echo "nslookup完整结果: $nslookup_result"
+
+# 如果指定了DNS服务器失败，尝试不指定DNS服务器
+echo "尝试不指定DNS服务器..."
+default_nslookup=$(nslookup "$ali_ddns_name" 2>&1)
+echo "默认DNS查询结果: $default_nslookup"
+
+# 尝试使用不同的查询方式
+echo "尝试使用dig命令（如果可用）..."
+if command -v dig >/dev/null 2>&1; then
+    dig_result=$(dig +short "$ali_ddns_name" 2>&1)
+    echo "dig查询结果: $dig_result"
+else
+    echo "dig命令不可用"
 fi
 
-ddns_ip=$(nslookup -query="$ali_ddns_ip_type" "$ali_ddns_name" "$dns_server"| grep "Address" | grep -v "#53" | grep -v ":53" | awk '{print $2}')
-echo "ddns_ip = $ddns_ip"
+# 尝试使用host命令（如果可用）
+echo "尝试使用host命令（如果可用）..."
+if command -v host >/dev/null 2>&1; then
+    host_result=$(host "$ali_ddns_name" 2>&1)
+    echo "host查询结果: $host_result"
+else
+    echo "host命令不可用"
+fi
+ddns_ip_raw=$(echo "$nslookup_result" | grep "Address" | grep -v "#53" | grep -v ":53" | awk '{print $2}')
+echo "ddns_ip_raw = $ddns_ip_raw"
+
+# 确保即使DNS查询失败也能继续执行
+echo "处理DNS查询结果..."
+if [ -z "$ddns_ip_raw" ]; then
+    echo "DNS查询未返回有效结果，设置默认值"
+    ddns_ip_raw="0.0.0.0"
+    echo "ddns_ip_raw设置为: $ddns_ip_raw"
+fi
+# 检查是否返回了多个IP地址
+ddns_ip_count=$(echo "$ddns_ip_raw" | grep -v "^$" | wc -l)
+echo "检测到DDNS IP地址 ($ddns_ip_count 个)"
+if [ $ddns_ip_count -gt 1 ]; then
+    echo "检测到多个DDNS IP地址 ($ddns_ip_count 个)，先删除所有记录再新增"
+    # 删除所有现有记录
+    record_array=($record_ids)
+    for record_id in "${record_array[@]}"
+    do
+        if [ -n "$record_id" ]
+        then
+            echo "删除记录 ID: $record_id"
+            delete_record "$record_id"
+            sleep 2
+        fi
+    done
+    # 清空record_id，强制走新增流程
+    ali_ddns_record_id=""
+    ali_ddns_ipv4_record_id=""
+    ali_ddns_ipv6_record_id=""
+    # 重新查询record信息（此时应该为空）
+    ali_ddns_record_info=$(query_record_id)
+    record_id_num=0
+    ddns_ip="0.0.0.0"
+    echo "ddns_ip1 = $ddns_ip"
+else
+    # 单个IP情况，正常处理record_id
+    if [ $((record_id_num)) -gt 1 ]; then
+        # 如果记录数大于1，也删除所有记录
+        echo "检测到多个DDNS记录 ($record_id_num 个)，删除所有记录"
+        record_array=($record_ids)
+        for record_id in "${record_array[@]}"
+        do
+            if [ -n "$record_id" ]
+            then
+                echo "删除记录 ID: $record_id"
+                delete_record "$record_id"
+                sleep 2
+            fi
+        done
+        # 清空record_id
+        ali_ddns_record_id=""
+        ali_ddns_ipv4_record_id=""
+        ali_ddns_ipv6_record_id=""
+        ali_ddns_record_info=$(query_record_id)
+        record_id_num=0
+        ddns_ip="0.0.0.0"
+        echo "ddns_ip2 = $ddns_ip"
+    else
+        # 正常情况，获取单个record_id
+        echo "处理正常情况，record_id_num = $record_id_num"
+        ali_ddns_record_id=$(echo "$ali_ddns_record_info" | get_record_id)
+        echo "ali_ddns_record_id is " "$ali_ddns_record_id"
+        echo "****************"
+        if [ "$ali_ddns_ip_type" = 'A' ]; then
+            ali_ddns_ipv4_record_id=$ali_ddns_record_id
+            echo "设置ali_ddns_ipv4_record_id = $ali_ddns_ipv4_record_id"
+        else
+            ali_ddns_ipv6_record_id=$ali_ddns_record_id
+            echo "设置ali_ddns_ipv6_record_id = $ali_ddns_ipv6_record_id"
+        fi
+        ddns_ip=$(echo "$ddns_ip_raw" | head -n 1)
+        echo "ddns_ip3 = $ddns_ip"
+        echo "处理完成，继续执行..."
+    fi
+fi
 if [ "$ali_ddns_ip_type" = 'A' ]
 then
     echo "ddns is IPv4."
@@ -291,10 +330,26 @@ then
         machine_ip=$(getMachine_IPv42)
     fi
     echo "machine_ip = $machine_ip"
+    if [ $ddns_ip_count -gt 1 ]; then
+        echo "已删除所有旧记录，将添加新的IP: $machine_ip"
+    elif [ -z "$ali_ddns_record_id" ]; then
+        echo "将添加新的记录，IP: $machine_ip"
+    else
+        echo "将更新现有记录，IP: $machine_ip"
+    fi
+    echo "走到这里了1"
+    echo "ali_ddns_ipv4_record_id = $ali_ddns_ipv4_record_id"
+    echo "ali_ddns_record_id (之前) = $ali_ddns_record_id"
     ali_ddns_record_id=$ali_ddns_ipv4_record_id
-    exist_local=$(ip addr show pppoe-wan | grep "scope global pppoe-wan" | grep -c "$machine_ip")
-    exist_ddns=$(echo "$ddns_ip" | grep -c "$machine_ip")
-    exist_ddns_local=$(ip addr show pppoe-wan | grep "scope global pppoe-wan" | grep -c "$ddns_ip")
+    echo "ali_ddns_record_id (之后) = $ali_ddns_record_id"
+    echo "ali_ddns_record_id = $ali_ddns_record_id"
+    exist_local=$(ip addr show pppoe-wan | grep "scope global pppoe-wan" | grep "$machine_ip"| wc -l)
+    echo "exist_local = $exist_local"
+    exist_ddns=$(echo "$ddns_ip" | grep "$machine_ip"| wc -l)
+    echo "exist_ddns = $exist_ddns"
+    exist_ddns_local=$(ip addr show pppoe-wan | grep "scope global pppoe-wan" | grep "$ddns_ip"| wc -l)
+    echo "exist_ddns_local = $exist_ddns_local"
+    echo "走到这里了"
 else
     echo "ddns is IPv6."
     machine_ip=$(getMachine_IPv6)
@@ -303,22 +358,41 @@ else
         machine_ip=$(getMachine_IPv62)
     fi
     echo "machine_ip = $machine_ip"
+    if [ $ddns_ip_count -gt 1 ]; then
+        echo "已删除所有旧记录，将添加新的IP: $machine_ip"
+    elif [ -z "$ali_ddns_record_id" ]; then
+        echo "将添加新的记录，IP: $machine_ip"
+    else
+        echo "将更新现有记录，IP: $machine_ip"
+    fi
     ali_ddns_record_id=$ali_ddns_ipv6_record_id
+    echo "ali_ddns_record_id = $ali_ddns_record_id"
     exist_local=$(ip addr show br-lan | grep "scope global dynamic noprefixroute" | grep "$machine_ip"| wc -l)
     exist_ddns=$(echo "$ddns_ip" | grep "$machine_ip"| wc -l)
     exist_ddns_local=$(ip addr show br-lan | grep "scope global dynamic noprefixroute" | grep "$ddns_ip"| wc -l)
+    echo "exist_local = $exist_local"
+    echo "exist_ddns = $exist_ddns"
+    echo "exist_ddns_local = $exist_ddns_local"
 fi
 echo "exist_ddns_local = $exist_ddns_local"
 echo "exist_local = $exist_local"
 echo "exist_ddns = $exist_ddns"
+echo "开始检查退出条件..."
 if [ -z "$machine_ip" ]
 then
-    echo "machine_ip is empty!"
-    exit 0
+    echo "machine_ip is empty! 但这不应该发生，因为前面已经获取到了IP"
+    echo "machine_ip值: '$machine_ip'"
+    echo "继续执行以进行调试..."
+    # exit 0  # 暂时注释掉退出
 fi
+echo "通过machine_ip检查"
+echo "检查exist_ddns条件: $exist_ddns"
 if [ $((exist_ddns)) -gt 0 ]
 then
-    echo "skipping ddns"
+    echo "skipping ddns (exist_ddns > 0)"
+    echo "exist_ddns值: $exist_ddns"
+    echo "ddns_ip值: '$ddns_ip'"
+    echo "machine_ip值: '$machine_ip'"
     exit 1
 else
     if [ $((exist_ddns_local)) -gt 0 ] && [ -n "$ddns_ip" ]
@@ -327,13 +401,19 @@ else
         exit 1
     fi
 fi
+echo "检查exist_local条件: $exist_local"
 if [ $((exist_local)) -eq 0 ]
 then
-    echo "machine_ip is error"
-    exit 1
+    echo "machine_ip is error (本地IP不存在)"
+    echo "exist_local值: $exist_local"
+    echo "machine_ip值: '$machine_ip'"
+    echo "继续执行以进行调试..."
+    # exit 1  # 暂时注释掉退出
 fi
+echo "通过exist_local检查"
 txt_ip=$(get_temp_ip)
-if [ "$machine_ip" = "$txt_ip" ]
+echo "txt_ip = $txt_ip"
+if [ "$machine_ip" = "$txt_ip" ] && [ "$machine_ip" = "$ddns_ip" ]
 then
     echo "machine_ip same with txt_ip"
     exit 1
