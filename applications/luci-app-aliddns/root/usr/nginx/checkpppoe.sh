@@ -6,3 +6,9 @@ then
 else
     echo "pass"
 fi
+if ps w | grep -v grep | grep -q "nginx: master process"; then
+    echo "Nginx is running"
+else
+    echo "Nginx start"
+    /etc/init.d/nginx start
+fi
