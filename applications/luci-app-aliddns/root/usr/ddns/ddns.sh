@@ -63,13 +63,7 @@ if [ ! -e /usr/ddns/temp_ip ]; then
     touch /usr/ddns/temp_ip
 fi
 hostname=$(uci get system.@system[0].hostname)
-if [ "$hostname" = "R404" ]; then
-    url_name="10.0.4.51:8080/Serv"
-elif [ "$hostname" = "R2804" ]; then
-    url_name="10.0.28.22:8080/MailServ"
-elif [ "$hostname" = "R207" ]; then
-    url_name="10.0.2.22:8080/MailServ"
-fi
+url_name="atut.efdata.fun:45678/sv/mail"
 machine_ip=""
 ddns_ip=""
 ali_ddns_record_id=""
@@ -93,7 +87,7 @@ function get_temp_ip() {
 function set_temp_ip() {
     $(rm -rf /usr/ddns/$ali_ddns_name)
     $(echo "$machine_ip" > /usr/ddns/$ali_ddns_name)
-#    curl -s "http://$url_name/ddns?domain=$ali_ddns_name&ip=$(enc "$machine_ip")"
+    curl -s "http://$url_name/ddns?domain=$ali_ddns_name&ip=$(enc "$machine_ip")"
 }
 function getMachine_IPv4() {
     a=$(/usr/bin/wget -qO- -t1 -T2 http://4.ipw.cn)
@@ -335,6 +329,7 @@ then
     exit 1
 else
     set_temp_ip
+    echo "set temp ip done"
 fi
 echo "start update ddns..."
 
