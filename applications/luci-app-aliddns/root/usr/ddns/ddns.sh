@@ -77,9 +77,8 @@ fi
 now=$(date)
 echo "**************************************************"
 echo "$now"
-echo "$ali_ddns_name"
-echo "$ali_ddns_ip_type"
-echo "--------------------"
+echo "域名：${ali_ddns_name} 类型：${ali_ddns_ip_type}"
+echo "**************************************************"
 function get_temp_ip() {
     a=$(cat /usr/ddns/$ali_ddns_name)
     echo "$a"
@@ -186,28 +185,23 @@ function delete_record() {
     send_request "DeleteDomainRecord" "RR=$ali_ddns_subdomain&RecordId=$1&SignatureMethod=HMAC-SHA1&SignatureNonce=$timestamp&SignatureVersion=1.0&TTL=$ali_ddns_ttl&Timestamp=$timestamp&Type=$ali_ddns_ip_type&Value=$(enc "$machine_ip")"
 }
 function add_record() {
-    echo "add"
     timestamp=$(date -u "+%Y-%m-%dT%H%%3A%M%%3A%SZ")
     # shellcheck disable=SC2086
     send_request "AddDomainRecord&DomainName=$ali_ddns_domain" "RR=$ali_ddns_subdomain&SignatureMethod=HMAC-SHA1&SignatureNonce=$timestamp&SignatureVersion=1.0&TTL=$ali_ddns_ttl&Timestamp=$timestamp&Type=$ali_ddns_ip_type&Value=$(enc $machine_ip)"
 }
-# 先查询当前的DNS记录信息
 echo "查询阿里云DNS记录..."
 ali_ddns_record_info=$(query_record_id)
 record_id_num=$(getJsonValuesByAwk "$ali_ddns_record_info" "TotalCount" "defaultValue")
 record_ids=$(getJsonValuesByAwk "$ali_ddns_record_info" "RecordId" "defaultValue" | tr -d '\n')
 record_ids=${record_ids//\"\"/\" \"}
 record_ids=${record_ids//\"/}
-# 直接执行nslookup
 nslookup_result=$(nslookup -query="$ali_ddns_ip_type" "$ali_ddns_name" "$dns_server" 2>&1)
 ddns_ip_raw=$(echo "$nslookup_result" | grep "Address" | grep -v "#53" | grep -v ":53" | awk '{print $2}')
 echo "ddns_ip_raw = $ddns_ip_raw"
-# 确保即使DNS查询失败也能继续执行
 echo "处理DNS查询结果..."
 if [ -z "$ddns_ip_raw" ]; then
     echo "DNS查询未返回有效结果，设置默认值"
     ddns_ip_raw="0.0.0.0"
-    echo "ddns_ip_raw设置为: $ddns_ip_raw"
 fi
 # 检查是否返回了多个IP地址
 ddns_ip_count=$(echo "$ddns_ip_raw" | grep -v "^$" | wc -l)
@@ -219,16 +213,13 @@ if [ $ddns_ip_count -gt 1 ]; then
     do
         if [ -n "$record_id" ]
         then
-            echo "删除记录 ID: $record_id"
             delete_record "$record_id"
             sleep 2
         fi
     done
-    # 清空record_id，强制走新增流程
     ali_ddns_record_id=""
     ali_ddns_ipv4_record_id=""
     ali_ddns_ipv6_record_id=""
-    # 重新查询record信息（此时应该为空）
     ali_ddns_record_info=$(query_record_id)
     record_id_num=0
     ddns_ip="0.0.0.0"
@@ -243,7 +234,6 @@ else
         do
             if [ -n "$record_id" ]
             then
-                echo "删除记录 ID: $record_id"
                 delete_record "$record_id"
                 sleep 2
             fi
@@ -258,7 +248,7 @@ else
         echo "ddns_ip2 = $ddns_ip"
     else
         # 正常情况，获取单个record_id
-        echo "处理正常情况，record_id_num = $record_id_num"
+        echo "处理正常情况"
         ali_ddns_record_id=$(echo "$ali_ddns_record_info" | get_record_id)
         if [ "$ali_ddns_ip_type" = 'A' ]; then
             ali_ddns_ipv4_record_id=$ali_ddns_record_id
@@ -271,27 +261,26 @@ else
 fi
 if [ "$ali_ddns_ip_type" = 'A' ]
 then
-    echo "ddns is IPv4."
+    echo "ddns是IPv4类型"
     machine_ip=$(getMachine_IPv4)
     if [ "$machine_ip" = "" ]
     then
         machine_ip=$(getMachine_IPv42)
     fi
-    echo "machine_ip = $machine_ip"
+    echo "本机IP是$machine_ip"
     ali_ddns_record_id=$ali_ddns_ipv4_record_id
     exist_local=$(ip addr show pppoe-wan | grep "scope global pppoe-wan" | grep "$machine_ip"| wc -l)
     exist_ddns=$(echo "$ddns_ip" | grep "$machine_ip"| wc -l)
     exist_ddns_local=$(ip addr show pppoe-wan | grep "scope global pppoe-wan" | grep "$ddns_ip"| wc -l)
 else
-    echo "ddns is IPv6."
+    echo "ddns是IPv6类型"
     machine_ip=$(getMachine_IPv6)
     if [ "$machine_ip" = "" ]
     then
         machine_ip=$(getMachine_IPv62)
     fi
-    echo "machine_ip = $machine_ip"
+    echo "本机IP是$machine_ip"
     ali_ddns_record_id=$ali_ddns_ipv6_record_id
-    echo "ali_ddns_record_id = $ali_ddns_record_id"
     exist_local=$(ip addr show br-lan | grep "scope global dynamic noprefixroute" | grep "$machine_ip"| wc -l)
     exist_ddns=$(echo "$ddns_ip" | grep "$machine_ip"| wc -l)
     exist_ddns_local=$(ip addr show br-lan | grep "scope global dynamic noprefixroute" | grep "$ddns_ip"| wc -l)
@@ -302,42 +291,42 @@ echo "exist_ddns = $exist_ddns"
 echo "开始检查退出条件..."
 if [ -z "$machine_ip" ]
 then
-    echo "machine_ip is empty! "
+    echo "网站查询到的本机IP是空的！"
     exit 0
 fi
 if [ $((exist_ddns)) -gt 0 ]
 then
-    echo "skipping ddns (exist_ddns > 0)"
+    echo "网站查询到的本机IP已在DDNS表里，跳过"
     exit 1
 else
     if [ $((exist_ddns_local)) -gt 0 ] && [ -n "$ddns_ip" ]
     then
-        echo "skipping ddns_local"
+        echo "网站查询到的解析IP在物理IP中，跳过"
         exit 1
     fi
 fi
 if [ $((exist_local)) -eq 0 ]
 then
-    echo "machine_ip is error (本地IP不存在)"
+    echo "物理IP中没有网站查询到的本机IP，跳过"
     exit 1
 fi
 txt_ip=$(get_temp_ip)
 echo "txt_ip = $txt_ip"
 if [ "$machine_ip" = "$txt_ip" ] && [ "$machine_ip" = "$ddns_ip" ]
 then
-    echo "machine_ip same with txt_ip"
+    echo "网站查询到的本机IP和上次记录IP一致，跳过"
     exit 1
 else
     set_temp_ip
-    echo "set temp ip done"
+    echo "设置本地缓存IP完成"
 fi
-echo "start update ddns..."
+echo "开始操作阿里云DDNS解析"
 
 #add support */%2A and @/%40 record
 
 if [ -z "$ali_ddns_record_id" ]
 then
-    echo "add record starting"
+    echo "开始新增解析记录"
     ali_ddns_record_id=$(add_record | get_record_id)
     if [ -z "$ali_ddns_record_id" ]
     then
@@ -352,7 +341,7 @@ then
         echo "added record id is:" "$ali_ddns_record_id"
     fi
 else
-    echo "update record starting"
+    echo "开始修改解析记录"
     update_record "$ali_ddns_record_id"
     echo "updated record id is:" "$ali_ddns_record_id"
 fi
