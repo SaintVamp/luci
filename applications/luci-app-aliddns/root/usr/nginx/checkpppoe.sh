@@ -10,5 +10,6 @@ if ps w | grep -v grep | grep -q "nginx: master process"; then
     echo "Nginx is running"
 else
     echo "Nginx start"
+    uci set nginx.global.uci_enable='false'
     /etc/init.d/nginx start
 fi
