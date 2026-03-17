@@ -7,62 +7,93 @@ CONFIG=aliddns
 CONFIG_PATH=/var/etc/$CONFIG
 cronfile="/usr/ddns/cronfile"
 tempfile="/usr/ddns/tempfile"
-
+RUN_SCRIPT="/usr/ddns/run.sh"
+LOG_DIR="/usr/ddns/log"
 
 run_service() {
-#	config_get enable $1 enable
-#	[ "$enable" = "" ] && return 0
-	config_get AccessKeyId $1 AccessKeyId
-	[ "AccessKeyId" = "" ] && return 0
-	config_get AccessKeySecret $1 AccessKeySecret
-	[ "AccessKeySecret" = "" ] && return 0
+	# 从 global 配置读取全局参数
+	config_get AccessKeyId "settings" AccessKeyId
+	[ -z "$AccessKeyId" ] && return 0
+	config_get AccessKeySecret "settings" AccessKeySecret
+	[ -z "$AccessKeySecret" ] && return 0
+	config_get TTL "settings" TTL
+	config_get DnsServer "settings" DnsServer
+	config_get UrlName "settings" UrlName
+
+	# 从 domain 配置读取独立参数
 	config_get Subdomain $1 Subdomain
 	config_get Domain $1 Domain
 	config_get Iptype $1 Iptype
-	config_get TTL $1 TTL
-	config_get DnsServer $1 DnsServer
 
-	echo "*/5 * * * * /bin/bash /usr/ddns/ddns.sh $AccessKeyId $AccessKeySecret $Subdomain $Domain $Iptype $TTL $DnsServer" >> /usr/ddns/cronfile
+	# 直接生成 ddns.sh 执行命令到 run.sh（带日志输出）
+	config_get Subdomain $1 Subdomain
+	config_get Domain $1 Domain
+	LOG_FILE="$LOG_DIR/${Subdomain}.${Domain}.log"
+	echo "/bin/bash /usr/ddns/ddns.sh $AccessKeyId $AccessKeySecret $Subdomain $Domain $Iptype $TTL $DnsServer $UrlName > $LOG_FILE 2>&1" >> $RUN_SCRIPT
 }
+
 conf_set(){
-  keyword="ddns"
-  rm -rf $cronfile
-  rm -rf $tempfile
-  `crontab -l > $tempfile`
-  while read -r line
-  do
-    if [[ "$line" == "*$keyword*" ]]
-    then
-      pass
-    else
-      `echo "$line" >> $cronfile`
-    fi
-  done < $tempfile
+	keyword="ddns"
+	rm -rf $cronfile
+	rm -rf $tempfile
+	crontab -l > $tempfile 2>/dev/null
+	while read -r line
+	do
+		if echo "$line" | grep -q "*$keyword*"
+		then
+			continue
+		else
+			echo "$line" >> $cronfile
+		fi
+	done < $tempfile
 }
 
 start() {
-#	enable=$(uci -q get $CONFIG.@global[0].enable)
-#	if [ "$enable" = "0" ];then
-#		stop_service
-#	else
-#		mkdir -p $CONFIG_PATH
-#		rm -f /var/etc/$CONFIG.port
-#		config_load $CONFIG
-#		config_foreach run_service "config"
 	conf_set
-  config_load $CONFIG
-  config_foreach run_service "alikey"
-  crontab -r
-  crontab $cronfile
-#	fi
+	
+	# 确保日志目录存在
+	mkdir -p $LOG_DIR
+	
+	# 重新生成 run.sh 脚本
+	echo '#!/bin/bash' > $RUN_SCRIPT
+	echo '# Auto-generated DDNS execution script' >> $RUN_SCRIPT
+	echo '# Generated at: '"$(date)" >> $RUN_SCRIPT
+	echo '' >> $RUN_SCRIPT
+	
+	config_load $CONFIG
+	
+	# 先验证全局配置是否存在
+	config_get AccessKeyId "settings" AccessKeyId
+	if [ -z "$AccessKeyId" ]; then
+		echo "echo \"Warning: AccessKeyId not configured, skipping DDNS\"" >> $RUN_SCRIPT
+	else
+		# 遍历所有 domain 配置，生成执行命令
+		config_foreach run_service "domain"
+	fi
+	
+	# 设置执行权限
+	chmod +x $RUN_SCRIPT
+	
+	# 只生成一个 cron 任务，调用 run.sh
+	echo "*/5 * * * * /bin/bash $RUN_SCRIPT" >> $cronfile
+	crontab -r
+	crontab $cronfile
 }
 
 stop() {
-  conf_set
-  crontab -r
-  crontab $cronfile
+	conf_set
+	crontab -r
+	crontab $cronfile
 }
 
 restart() {
 	start
+}
+
+enable() {
+	start
+}
+
+disable() {
+	stop
 }

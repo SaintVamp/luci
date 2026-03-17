@@ -63,7 +63,7 @@ if [ ! -e /usr/ddns/temp_ip ]; then
     touch /usr/ddns/temp_ip
 fi
 hostname=$(uci get system.@system[0].hostname)
-url_name="atut.efdata.fun:45678/sv/mail"
+url_name=$8
 machine_ip=""
 ddns_ip=""
 ali_ddns_record_id=""
@@ -190,6 +190,7 @@ function add_record() {
     send_request "AddDomainRecord&DomainName=$ali_ddns_domain" "RR=$ali_ddns_subdomain&SignatureMethod=HMAC-SHA1&SignatureNonce=$timestamp&SignatureVersion=1.0&TTL=$ali_ddns_ttl&Timestamp=$timestamp&Type=$ali_ddns_ip_type&Value=$(enc $machine_ip)"
 }
 echo "查询阿里云DNS记录..."
+sleep 1
 ali_ddns_record_info=$(query_record_id)
 record_id_num=$(getJsonValuesByAwk "$ali_ddns_record_info" "TotalCount" "defaultValue")
 record_ids=$(getJsonValuesByAwk "$ali_ddns_record_info" "RecordId" "defaultValue" | tr -d '\n')

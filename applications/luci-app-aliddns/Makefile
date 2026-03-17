@@ -14,6 +14,8 @@ define Package/$(PKG_NAME)/install
 #!/bin/sh
 chmod +x /etc/init.d/aliddns
 chmod +x /usr/bin/ethinfo
+chmod +x /usr/ddns/run.sh
+chmod +x /usr/ddns/ddns.sh
 exit 0
 endef
 
