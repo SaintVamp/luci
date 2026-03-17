@@ -4,7 +4,7 @@ then
     echo "restart wan"
     `ifup wan`
 else
-    echo "pass"
+    echo "DNS check passed"
 fi
 if ps w | grep -v grep | grep -q "nginx: master process"; then
     echo "Nginx is running"
