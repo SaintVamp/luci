@@ -57,6 +57,13 @@ start() {
 	if ! crontab -l 2>/dev/null | grep -q "\*/5.*$RUN_SCRIPT"; then
 		echo "*/5 * * * * /bin/bash $RUN_SCRIPT" | crontab -
 	fi
+	
+	# 检查 checkpppoe.sh 的 cron 任务是否已存在，不存在才添加
+	if [ -f /usr/nginx/checkpppoe.sh ]; then
+		if ! crontab -l 2>/dev/null | grep -q "\*/5.*/usr/nginx/checkpppoe.sh"; then
+			echo "*/5 * * * * /bin/bash /usr/nginx/checkpppoe.sh" | crontab -
+		fi
+	fi
 }
 
 stop() {

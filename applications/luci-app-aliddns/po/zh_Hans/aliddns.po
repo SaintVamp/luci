@@ -8,13 +8,13 @@ msgid "AccessKeyId"
 msgstr "用户标识"
 
 msgid "Aliyun Access Key ID for all domains."
-msgstr "输入阿里云的AccessKeyId。"
+msgstr "输入阿里云的AccessKeyId"
 
 msgid "AccessKeySecret"
 msgstr "用户密钥"
 
 msgid "Aliyun Access Key Secret for all domains."
-msgstr "输入阿里云的AccessKeySecret。"
+msgstr "输入阿里云的AccessKeySecret"
 
 msgid "TTL"
 msgstr "TTL"
