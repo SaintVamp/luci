@@ -1,56 +1,56 @@
-msgid ""
-msgstr "Content-Type: text/plain; charset=UTF-8"
+msgid "Aliyun DDNS Tool"
+msgstr ""
+
+msgid "Global Settings"
+msgstr ""
 
 msgid "AccessKeyId"
 msgstr ""
 
-msgid "Type in aliyun accesskeyid."
-msgstr "。"
+msgid "Aliyun Access Key ID for all domains"
+msgstr ""
 
 msgid "AccessKeySecret"
 msgstr ""
 
-msgid "Type in aliyun accesskeysecret."
-msgstr ""
-
-msgid "Config"
-msgstr ""
-
-msgid "Aliyun DDNS Tool"
-msgstr ""
-
-msgid "Subdomain"
-msgstr ""
-
-msgid "Type in resolve subdomain."
-msgstr ""
-
-msgid "Domain"
-msgstr ""
-
-msgid "Type in resolve domain."
-msgstr ""
-
-msgid "Iptype"
-msgstr ""
-
-msgid "IPV4"
-msgstr ""
-
-msgid "IPV6"
-msgstr ""
-
-msgid "Type in resolve IP type."
+msgid "Aliyun Access Key Secret for all domains."
 msgstr ""
 
 msgid "TTL"
 msgstr ""
 
-msgid "Type in resolve domain ttl."
+msgid "Time to Live in seconds (default: 600)."
 msgstr ""
 
-msgid "DnsServer"
+msgid "Dns Server"
 msgstr ""
 
 msgid "Type in resolve domain dnsserver."
+msgstr ""
+
+msgid "URL Name"
+msgstr ""
+
+msgid "Callback URL for notifications."
+msgstr ""
+
+msgid "Domain Configurations"
+msgstr ""
+
+msgid "Subdomain"
+msgstr ""
+
+msgid "Choose a resolve subdomain."
+msgstr ""
+
+msgid "Domain"
+msgstr ""
+
+msgid "Choose a resolve domain."
+msgstr ""
+
+msgid "IP Type"
+msgstr ""
+
+msgid "Choose a resolve IP type."
 msgstr ""

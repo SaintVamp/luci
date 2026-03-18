@@ -1,5 +1,5 @@
 msgid "Aliyun DDNS Tool"
-msgstr "阿里云ddns工具"
+msgstr "阿里云DDNS工具"
 
 msgid "Global Settings"
 msgstr "全局设置"
