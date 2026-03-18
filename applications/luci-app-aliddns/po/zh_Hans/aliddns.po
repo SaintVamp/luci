@@ -1,53 +1,56 @@
+msgid "Aliyun DDNS Tool"
+msgstr "阿里云ddns工具"
+
+msgid "Global Settings"
+msgstr "全局设置"
+
 msgid "AccessKeyId"
 msgstr "用户标识"
 
-msgid "Type in aliyun accesskeyid."
+msgid "Aliyun Access Key ID for all domains"
 msgstr "输入阿里云的AccessKeyId。"
 
 msgid "AccessKeySecret"
 msgstr "用户密钥"
 
-msgid "Type in aliyun accesskeysecret."
+msgid "Aliyun Access Key Secret for all domains."
 msgstr "输入阿里云的AccessKeySecret。"
-
-msgid "Config"
-msgstr "设置"
-
-msgid "Aliyun DDNS Tool"
-msgstr "阿里云ddns工具"
-
-msgid "Subdomain"
-msgstr "子域名"
-
-msgid "Type in resolve subdomain."
-msgstr "输入解析子域名"
-
-msgid "Domain"
-msgstr "域名"
-
-msgid "Type in resolve domain."
-msgstr "输入解析域名"
-
-msgid "Iptype"
-msgstr "解析IP类型"
-
-msgid "IPV4"
-msgstr "IPV4"
-
-msgid "IPV6"
-msgstr "IPV6"
-
-msgid "Type in resolve IP type."
-msgstr "输入解析IP类型"
 
 msgid "TTL"
 msgstr "TTL"
 
-msgid "Type in resolve domain ttl."
-msgstr "输入域名存活时间"
+msgid "Time to Live in seconds (default: 600)."
+msgstr "输入域名存活时间（默认600秒）"
 
-msgid "DnsServer"
+msgid "Dns Server"
 msgstr "域名解析服务器"
 
 msgid "Type in resolve domain dnsserver."
 msgstr "输入域名解析服务器地址"
+
+msgid "URL Name"
+msgstr "邮件通知API"
+
+msgid "Callback URL for notifications."
+msgstr "输入邮件通知的API地址"
+
+msgid "Domain Configurations"
+msgstr "域名配置"
+
+msgid "Subdomain"
+msgstr "子域名"
+
+msgid "Choose a resolve subdomain."
+msgstr "选择子域名"
+
+msgid "Domain"
+msgstr "主域名"
+
+msgid "Choose a resolve domain."
+msgstr "选择主域名"
+
+msgid "IP Type"
+msgstr "解析IP类型"
+
+msgid "Choose a resolve IP type."
+msgstr "选择解析IP类型"

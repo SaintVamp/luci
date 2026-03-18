@@ -40,7 +40,7 @@ return view.extend({
         o.datatype = "uinteger";
 
         o = s.option(form.Value, "DnsServer", _("DNS Server"),
-            _("DNS server for querying (e.g., 223.5.5.5)."));
+            _("Type in resolve domain dnsserver."));
         o.default = "dns23.hichina.com";
         o.rmempty = false;
 
@@ -57,7 +57,7 @@ return view.extend({
         s.rmempty = false;
 
         o = s.option(form.Value, "Subdomain", _("Subdomain"),
-            _("Subdomain to update (e.g., www, @, test)."));
+            _("Choose a resolve subdomain."));
         o.value("404", _("404"));
         o.value("207", _("207"));
         o.value("2804", _("2804"));
@@ -69,7 +69,7 @@ return view.extend({
         o.modalonly = true;
 
         o = s.option(form.Value, "Domain", _("Domain"),
-            _("Main domain (e.g., example.com)."));
+            _("Choose a resolve domain."));
         o.value("svsoft.fun", _("svsoft"));
         o.value("efdata.fun", _("efdata"));
         o.default = "svsoft.fun";
