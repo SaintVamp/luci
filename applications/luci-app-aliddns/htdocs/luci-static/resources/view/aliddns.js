@@ -58,13 +58,13 @@ return view.extend({
 
         o = s.option(form.Value, "Subdomain", _("Subdomain"),
             _("Subdomain to update (e.g., www, @, test)."));
-        o.value("@", _("@"));
-        o.value("www", _("www"));
-        o.value("test", _("test"));
         o.value("404", _("404"));
         o.value("207", _("207"));
         o.value("2804", _("2804"));
-        o.default = "@";
+        o.value("404_6", _("404_6"));
+        o.value("207_6", _("207_6"));
+        o.value("2804_6", _("2804_6"));
+        o.default = "404";
         o.rmempty = false;
         o.modalonly = true;
 
@@ -83,16 +83,6 @@ return view.extend({
         o.default = "A";
         o.rmempty = false;
         o.modalonly = true;
-
-        // 简要显示字段
-        o = s.option(form.DummyValue, "_display", _("Domain"));
-        o.editable = false;
-        o.textvalue = function(section_id) {
-            var subdomain = this.map.lookupOption("Subdomain", section_id)[0].formvalue(section_id);
-            var domain = this.map.lookupOption("Domain", section_id)[0].formvalue(section_id);
-            var iptype = this.map.lookupOption("Iptype", section_id)[0].formvalue(section_id);
-            return subdomain + "." + domain + " (" + iptype + ")";
-        };
 
         return m.render();
     }
