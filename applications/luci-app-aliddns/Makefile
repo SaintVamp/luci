@@ -37,6 +37,8 @@ define Package/$(PKG_NAME)/install
 	$(INSTALL_DATA) ./root/etc/init.d/aliddns $(1)/etc/init.d/aliddns
 	$(INSTALL_DIR) $(1)/usr/ddns
 	$(INSTALL_DATA) ./root/usr/ddns/*.sh $(1)/usr/ddns/
+	$(INSTALL_DIR) $(1)/etc/config
+	$(INSTALL_CONF) ./root/etc/config/aliddns $(1)/etc/config/aliddns
 endef
 
 define Package/$(PKG_NAME)/postinst

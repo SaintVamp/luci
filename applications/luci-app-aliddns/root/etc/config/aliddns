@@ -1,0 +1,11 @@
+config global 'settings'
+	option AccessKeyId 'your_access_key_id'
+	option AccessKeySecret 'your_access_key_secret'
+	option TTL '600'
+	option DnsServer 'dns23.hichina.com'
+	option UrlName ':45678/sv/mail'
+
+config domain 'domain1'
+	option Subdomain '404'
+	option Domain 'svsoft.fun'
+	option Iptype 'A'
