@@ -32,25 +32,7 @@ run_service() {
 	echo "/bin/bash /usr/ddns/ddns.sh $AccessKeyId $AccessKeySecret $Subdomain $Domain $Iptype $TTL $DnsServer $UrlName > $LOG_FILE 2>&1" >> $RUN_SCRIPT
 }
 
-conf_set(){
-	keyword="ddns"
-	rm -rf $cronfile
-	rm -rf $tempfile
-	crontab -l > $tempfile 2>/dev/null
-	while read -r line
-	do
-		if echo "$line" | grep -q "*$keyword*"
-		then
-			continue
-		else
-			echo "$line" >> $cronfile
-		fi
-	done < $tempfile
-}
-
 start() {
-	conf_set
-	
 	# 确保日志目录存在
 	mkdir -p $LOG_DIR
 	
@@ -74,16 +56,15 @@ start() {
 	# 设置执行权限
 	chmod +x $RUN_SCRIPT
 	
-	# 只生成一个 cron 任务，调用 run.sh
-	echo "*/5 * * * * /bin/bash $RUN_SCRIPT" >> $cronfile
-	crontab -r
-	crontab $cronfile
+	# 检查 cron 任务是否已存在，不存在才添加
+	if ! crontab -l 2>/dev/null | grep -q "\*/5.*$RUN_SCRIPT"; then
+		echo "*/5 * * * * /bin/bash $RUN_SCRIPT" | crontab -
+	fi
 }
 
 stop() {
-	conf_set
-	crontab -r
-	crontab $cronfile
+	# 只删除 DDNS 的 cron 任务，保留其他任务
+	crontab -l 2>/dev/null | grep -v "\*/5.*/usr/ddns/run.sh" | crontab -
 }
 
 restart() {
