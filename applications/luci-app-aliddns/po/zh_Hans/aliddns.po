@@ -7,7 +7,7 @@ msgstr "全局设置"
 msgid "AccessKeyId"
 msgstr "用户标识"
 
-msgid "Aliyun Access Key ID for all domains"
+msgid "Aliyun Access Key ID for all domains."
 msgstr "输入阿里云的AccessKeyId。"
 
 msgid "AccessKeySecret"
@@ -49,7 +49,7 @@ msgstr "主域名"
 msgid "Choose a resolve domain."
 msgstr "选择主域名"
 
-msgid "IP Type"
+msgid "IP type."
 msgstr "解析IP类型"
 
 msgid "Choose a resolve IP type."

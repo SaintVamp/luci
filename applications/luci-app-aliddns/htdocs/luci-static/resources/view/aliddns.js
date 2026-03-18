@@ -77,7 +77,7 @@ return view.extend({
         o.modalonly = true;
 
         o = s.option(form.ListValue, "Iptype", _("IP Type"),
-            _("IP address type."));
+            _("IP type."));
         o.value("A", _("IPv4"));
         o.value("AAAA", _("IPv6"));
         o.default = "A";

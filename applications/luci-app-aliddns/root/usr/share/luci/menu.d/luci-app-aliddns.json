@@ -1,6 +1,6 @@
 {
 	"admin/services/aliddns": {
-		"title": "AliDdns",
+		"title": "AliDDNS",
 		"order": 50,
 		"action": {
 			"type": "view",
