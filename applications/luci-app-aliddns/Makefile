@@ -10,12 +10,45 @@ LUCI_TITLE:=LuCI Support for AliDdns
 LUCI_DEPENDS:=+bash +curl +wget-ssl +openssl-util
 PKG_NAME:=luci-app-aliddns
 
+define Package/$(PKG_NAME)/conffiles
+/etc/config/aliddns
+endef
+
+define Package/$(PKG_NAME)/prerm
+#!/bin/sh
+# check if we are on real system
+if [ -z "${IPKG_INSTROOT}" ]; then
+    /etc/init.d/aliddns disable
+    /etc/init.d/aliddns stop
+fi
+exit 0
+endef
+
+define Package/$(PKG_NAME)/postrm
+#!/bin/sh
+if [ -z "${IPKG_INSTROOT}" ]; then
+    rm -rf /usr/ddns
+    rm -f /usr/bin/aliddns
+fi
+exit 0
+endef
+
 define Package/$(PKG_NAME)/install
-	chmod 755 $(1)/etc/init.d/aliddns
-	chmod 755 $(1)/usr/bin/ethinfo
-	chmod 755 $(1)/usr/ddns/run.sh
-	chmod 755 $(1)/usr/ddns/ddns.sh
-	chmod 755 $(1)/usr/ddns/update.sh
+	$(INSTALL_DIR) $(1)/etc/init.d
+	$(INSTALL_DATA) ./root/etc/init.d/aliddns $(1)/etc/init.d/aliddns
+	$(INSTALL_DIR) $(1)/usr/ddns
+	$(INSTALL_DATA) ./root/usr/ddns/*.sh $(1)/usr/ddns/
+	$(INSTALL_DIR) $(1)/usr/bin
+endef
+
+define Package/$(PKG_NAME)/postinst
+#!/bin/sh
+# check if we are on real system
+if [ -z "${IPKG_INSTROOT}" ]; then
+    chmod +x /etc/init.d/aliddns
+    chmod +x /usr/ddns/*.sh
+fi
+exit 0
 endef
 
 include ../../luci.mk

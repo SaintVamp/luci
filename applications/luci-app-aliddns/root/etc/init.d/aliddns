@@ -4,9 +4,6 @@
 START=98
 
 CONFIG=aliddns
-CONFIG_PATH=/var/etc/$CONFIG
-cronfile="/usr/ddns/cronfile"
-tempfile="/usr/ddns/tempfile"
 RUN_SCRIPT="/usr/ddns/run.sh"
 LOG_DIR="/usr/ddns/log"
 
