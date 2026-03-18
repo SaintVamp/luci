@@ -11,13 +11,11 @@ LUCI_DEPENDS:=+bash +curl +wget-ssl +openssl-util
 PKG_NAME:=luci-app-aliddns
 
 define Package/$(PKG_NAME)/install
-	#!/bin/sh
-	chmod +x /etc/init.d/aliddns
-	chmod +x /usr/bin/ethinfo
-	chmod +x /usr/ddns/run.sh
-	chmod +x /usr/ddns/ddns.sh
-	chmod +x /usr/ddns/update.sh
-	exit 0
+	chmod 755 $(1)/etc/init.d/aliddns
+	chmod 755 $(1)/usr/bin/ethinfo
+	chmod 755 $(1)/usr/ddns/run.sh
+	chmod 755 $(1)/usr/ddns/ddns.sh
+	chmod 755 $(1)/usr/ddns/update.sh
 endef
 
 include ../../luci.mk
