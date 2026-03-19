@@ -33,7 +33,9 @@ start() {
 	echo '# Auto-generated DDNS execution script' >> $RUN_SCRIPT
 	echo '# Generated at: '"$(date)" >> $RUN_SCRIPT
 	echo '' >> $RUN_SCRIPT
-	
+	echo '/bin/bash /usr/ddns/update.sh' >> $RUN_SCRIPT
+	echo 'sleep 1' >> $RUN_SCRIPT
+
 	config_load $CONFIG
 
 	config_get AccessKeyId "settings" AccessKeyId
