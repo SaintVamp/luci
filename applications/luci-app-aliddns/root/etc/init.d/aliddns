@@ -8,7 +8,6 @@ RUN_SCRIPT="/usr/ddns/run.sh"
 LOG_DIR="/usr/ddns/log"
 
 run_service() {
-	# 从 global 配置读取全局参数
 	config_get AccessKeyId "settings" AccessKeyId
 	[ -z "$AccessKeyId" ] && return 0
 	config_get AccessKeySecret "settings" AccessKeySecret
@@ -17,12 +16,10 @@ run_service() {
 	config_get DnsServer "settings" DnsServer
 	config_get UrlName "settings" UrlName
 
-	# 从 domain 配置读取独立参数
 	config_get Subdomain $1 Subdomain
 	config_get Domain $1 Domain
 	config_get Iptype $1 Iptype
 
-	# 直接生成 ddns.sh 执行命令到 run.sh（带日志输出）
 	config_get Subdomain $1 Subdomain
 	config_get Domain $1 Domain
 	LOG_FILE="$LOG_DIR/${Subdomain}.${Domain}.log"
@@ -30,40 +27,54 @@ run_service() {
 }
 
 start() {
-	# 确保日志目录存在
 	mkdir -p $LOG_DIR
-	
-	# 重新生成 run.sh 脚本
+
 	echo '#!/bin/bash' > $RUN_SCRIPT
 	echo '# Auto-generated DDNS execution script' >> $RUN_SCRIPT
 	echo '# Generated at: '"$(date)" >> $RUN_SCRIPT
 	echo '' >> $RUN_SCRIPT
 	
 	config_load $CONFIG
-	
-	# 先验证全局配置是否存在
+
 	config_get AccessKeyId "settings" AccessKeyId
 	if [ -z "$AccessKeyId" ]; then
 		echo "echo \"Warning: AccessKeyId not configured, skipping DDNS\"" >> $RUN_SCRIPT
 	else
-		# 遍历所有 domain 配置，生成执行命令
 		config_foreach run_service "domain"
 	fi
-	
-	# 设置执行权限
+
 	chmod +x $RUN_SCRIPT
 	
-	# 检查 cron 任务是否已存在，不存在才添加
-	if ! crontab -l 2>/dev/null | grep -q "\*/5.*$RUN_SCRIPT"; then
-		echo "*/5 * * * * /bin/bash $RUN_SCRIPT" | crontab -
+	ddns_exists=0
+	checkpppoe_exists=0
+	
+	if crontab -l 2>/dev/null | grep -q "\*/5.*$RUN_SCRIPT"; then
+		ddns_exists=1
 	fi
 	
-	# 检查 checkpppoe.sh 的 cron 任务是否已存在，不存在才添加
-	if [ -f /usr/nginx/checkpppoe.sh ]; then
-		if ! crontab -l 2>/dev/null | grep -q "\*/5.*/usr/nginx/checkpppoe.sh"; then
-			echo "*/5 * * * * /bin/bash /usr/nginx/checkpppoe.sh" | crontab -
-		fi
+
+  if crontab -l 2>/dev/null | grep -q "\*/5.*/usr/nginx/checkpppoe.sh"; then
+    checkpppoe_exists=1
+  fi
+
+	if [ $ddns_exists -eq 1 ] && [ $checkpppoe_exists -eq 1 ]; then
+		return 0
 	fi
+
+	temp_file="/tmp/crontab_$$"
+	crontab -l 2>/dev/null > $temp_file
+
+	if ! grep -q "\*/5.*$RUN_SCRIPT" $temp_file; then
+		echo "*/5 * * * * /bin/bash $RUN_SCRIPT" >> $temp_file
+	fi
+
+	if ! grep -q "\*/5.*/usr/nginx/checkpppoe.sh" $temp_file; then
+		echo "*/5 * * * * /bin/bash /usr/nginx/checkpppoe.sh" >> $temp_file
+	fi
+	
+	# 安装 cron 任务
+	crontab $temp_file
+	rm -f $temp_file
 }
 
 stop() {
