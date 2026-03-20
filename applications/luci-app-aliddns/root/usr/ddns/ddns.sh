@@ -173,19 +173,19 @@ function get_record_id() {
     grep -Eo '"RecordId":"[0-9]+"' | cut -d':' -f2 | tr -d '"'
 }
 function query_record_id() {
-    timestamp=$(date -u "+%Y-%m-%dT%H%%3A%M%%3A%SZ")
+    timestamp=$(date -u "+%Y-%m-%dT%H:%M:%SZ")
     send_request "DescribeSubDomainRecords" "SignatureMethod=HMAC-SHA1&SignatureNonce=$timestamp&SignatureVersion=1.0&SubDomain=$ali_ddns_name&Timestamp=$timestamp&Type=$ali_ddns_ip_type"
 }
 function update_record() {
-    timestamp=$(date -u "+%Y-%m-%dT%H%%3A%M%%3A%SZ")
+    timestamp=$(date -u "+%Y-%m-%dT%H:%M:%SZ")
     send_request "UpdateDomainRecord" "RR=$ali_ddns_subdomain&RecordId=$1&SignatureMethod=HMAC-SHA1&SignatureNonce=$timestamp&SignatureVersion=1.0&TTL=$ali_ddns_ttl&Timestamp=$timestamp&Type=$ali_ddns_ip_type&Value=$(enc "$machine_ip")"
 }
 function delete_record() {
-    timestamp=$(date -u "+%Y-%m-%dT%H%%3A%M%%3A%SZ")
+    timestamp=$(date -u "+%Y-%m-%dT%H:%M:%SZ")
     send_request "DeleteDomainRecord" "RR=$ali_ddns_subdomain&RecordId=$1&SignatureMethod=HMAC-SHA1&SignatureNonce=$timestamp&SignatureVersion=1.0&TTL=$ali_ddns_ttl&Timestamp=$timestamp&Type=$ali_ddns_ip_type&Value=$(enc "$machine_ip")"
 }
 function add_record() {
-    timestamp=$(date -u "+%Y-%m-%dT%H%%3A%M%%3A%SZ")
+    timestamp=$(date -u "+%Y-%m-%dT%H:%M:%SZ")
     # shellcheck disable=SC2086
     send_request "AddDomainRecord&DomainName=$ali_ddns_domain" "RR=$ali_ddns_subdomain&SignatureMethod=HMAC-SHA1&SignatureNonce=$timestamp&SignatureVersion=1.0&TTL=$ali_ddns_ttl&Timestamp=$timestamp&Type=$ali_ddns_ip_type&Value=$(enc $machine_ip)"
 }
