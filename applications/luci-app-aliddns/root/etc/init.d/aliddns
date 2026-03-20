@@ -23,7 +23,7 @@ run_service() {
 	config_get Subdomain $1 Subdomain
 	config_get Domain $1 Domain
 	LOG_FILE="$LOG_DIR/${Subdomain}.${Domain}.log"
-	echo "/bin/bash /usr/ddns/ddns.sh $AccessKeyId $AccessKeySecret $Subdomain $Domain $Iptype $TTL $DnsServer $UrlName > $LOG_FILE 2>&1" >> $RUN_SCRIPT
+	echo "/bin/bash /usr/ddns/ddns.sh $AccessKeyId $AccessKeySecret $Subdomain $Domain $Iptype $TTL $DnsServer $UrlName >> $RUN_SCRIPT
 }
 
 start() {
