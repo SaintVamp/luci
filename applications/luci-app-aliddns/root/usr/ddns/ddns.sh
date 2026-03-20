@@ -192,6 +192,8 @@ function add_record() {
 echo "查询阿里云DNS记录..."
 sleep 1
 ali_ddns_record_info=$(query_record_id)
+echo "ali_ddns_record_info = $ali_ddns_record_info"
+sleep 1
 record_id_num=$(getJsonValuesByAwk "$ali_ddns_record_info" "TotalCount" "defaultValue")
 record_ids=$(getJsonValuesByAwk "$ali_ddns_record_info" "RecordId" "defaultValue" | tr -d '\n')
 record_ids=${record_ids//\"\"/\" \"}
