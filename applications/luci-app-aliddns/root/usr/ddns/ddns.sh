@@ -174,16 +174,6 @@ function send_request() {
 function get_record_id() {
     grep -Eo '"RecordId":"[0-9]+"' | cut -d':' -f2 | tr -d '"'
 }
-function test_send_request() {
-    args="AccessKeyId=$AccessKeyId&Action=$1&Format=json&$2&Version=2015-01-09"
-    echo "args: $args"
-    hash=$(echo -n "GET&%2F&$(enc "$args")" | openssl dgst -sha1 -hmac "$AccessKeySecret&" -binary | openssl base64)
-    echo "http://alidns.aliyuncs.com/?$args&Signature=$(enc "$hash")"
-}
-function test_query() {
-    timestamp=$(date -u "+%Y-%m-%dT%H%%3A%M%%3A%SZ")
-    test_send_request "DescribeSubDomainRecords" "SignatureMethod=HMAC-SHA1&SignatureNonce=$timestamp&SignatureVersion=1.0&SubDomain=$ali_ddns_name&Timestamp=$timestamp&Type=$ali_ddns_ip_type"
-}
 function query_record_id() {
     timestamp=$(date -u "+%Y-%m-%dT%H%%3A%M%%3A%SZ")
     send_request "DescribeSubDomainRecords" "SignatureMethod=HMAC-SHA1&SignatureNonce=$timestamp&SignatureVersion=1.0&SubDomain=$ali_ddns_name&Timestamp=$timestamp&Type=$ali_ddns_ip_type"
@@ -203,7 +193,6 @@ function add_record() {
 }
 echo "查询阿里云DNS记录..."
 sleep 1
-test_query
 ali_ddns_record_info=$(query_record_id)
 echo "ali_ddns_record_info = $ali_ddns_record_info"
 sleep 1
