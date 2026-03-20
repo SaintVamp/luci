@@ -203,6 +203,7 @@ function add_record() {
 }
 echo "查询阿里云DNS记录..."
 sleep 1
+test_query
 ali_ddns_record_info=$(query_record_id)
 echo "ali_ddns_record_info = $ali_ddns_record_info"
 sleep 1
