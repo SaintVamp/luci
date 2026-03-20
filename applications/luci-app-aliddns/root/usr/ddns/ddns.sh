@@ -185,6 +185,8 @@ function send_request() {
     args="AccessKeyId=$AccessKeyId&Action=$1&Format=json&$2&Version=2015-01-09"
     log_message "请求阿里云DNS接口：$args"
     hash=$(echo -n "GET&%2F&$(enc "$args")" | openssl dgst -sha1 -hmac "$AccessKeySecret&" -binary | openssl base64)
+    log_message "$hash"
+    log_message "请求阿里云DNS地址：http://alidns.aliyuncs.com/?$args&Signature=$(enc "$hash")"
     curl -s "http://alidns.aliyuncs.com/?$args&Signature=$(enc "$hash")"
 }
 function get_record_id() {
