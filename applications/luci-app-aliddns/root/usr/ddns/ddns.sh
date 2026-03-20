@@ -47,6 +47,7 @@ AccessKeySecret=$2
 ali_ddns_subdomain=$3 #'test'
 ali_ddns_domain=$4 #'my_domain.com'
 
+
 # (*)ip地址类型：'A' 或 'AAAA'，代表ipv4 和 ipv6
 ali_ddns_ip_type=$5 # 'A' 或 'AAAA'，代表ipv4 和 ipv6
 
@@ -58,7 +59,22 @@ dns_server=$7
 #--------------------------------------------------------------
 #--------------------------------------------------------------
 
-#创建临时文件
+# 创建日志文件名变量
+LOG_FILE_NAME="real_${ali_ddns_subdomain}.${ali_ddns_domain}.log"
+LOG_FILE_PATH="/usr/ddns/log/$LOG_FILE_NAME"
+
+# 判断日志文件是否存在，存在则清空，不存在则创建
+if [ -f "$LOG_FILE_PATH" ]; then
+    > "$LOG_FILE_PATH"
+else
+    mkdir -p /usr/ddns/log && touch "$LOG_FILE_PATH"
+fi
+
+# 公用的日志写入函数
+log_message() {
+    local message="$1"
+    echo "$message" >> "$LOG_FILE_PATH"
+}
 if [ ! -e /usr/ddns/temp_ip ]; then
     touch /usr/ddns/temp_ip
 fi
@@ -75,12 +91,11 @@ else
   ali_ddns_name=$ali_ddns_subdomain.$ali_ddns_domain
 fi
 now=$(date)
-echo ""
-echo ""
-echo "**************************************************"
-echo "$now"
-echo "域名：${ali_ddns_name} 类型：${ali_ddns_ip_type}"
-echo "**************************************************"
+log_message ""
+log_message "**************************************************"
+log_message "$now"
+log_message "域名：${ali_ddns_name} 类型：${ali_ddns_ip_type}"
+log_message "**************************************************"
 function get_temp_ip() {
     a=$(cat /usr/ddns/$ali_ddns_name)
     echo "$a"
@@ -168,6 +183,7 @@ function enc() {
 }
 function send_request() {
     args="AccessKeyId=$AccessKeyId&Action=$1&Format=json&$2&Version=2015-01-09"
+    log_message "请求阿里云DNS接口：$args"
     hash=$(echo -n "GET&%2F&$(enc "$args")" | openssl dgst -sha1 -hmac "$AccessKeySecret&" -binary | openssl base64)
     curl -s "http://alidns.aliyuncs.com/?$args&Signature=$(enc "$hash")"
 }
@@ -191,10 +207,10 @@ function add_record() {
     # shellcheck disable=SC2086
     send_request "AddDomainRecord&DomainName=$ali_ddns_domain" "RR=$ali_ddns_subdomain&SignatureMethod=HMAC-SHA1&SignatureNonce=$timestamp&SignatureVersion=1.0&TTL=$ali_ddns_ttl&Timestamp=$timestamp&Type=$ali_ddns_ip_type&Value=$(enc $machine_ip)"
 }
-echo "查询阿里云DNS记录..."
+log_message "查询阿里云DNS记录..."
 sleep 1
 ali_ddns_record_info=$(query_record_id)
-echo "ali_ddns_record_info = $ali_ddns_record_info"
+log_message "ali_ddns_record_info = $ali_ddns_record_info"
 sleep 1
 record_id_num=$(getJsonValuesByAwk "$ali_ddns_record_info" "TotalCount" "defaultValue")
 record_ids=$(getJsonValuesByAwk "$ali_ddns_record_info" "RecordId" "defaultValue" | tr -d '\n')
@@ -202,16 +218,16 @@ record_ids=${record_ids//\"\"/\" \"}
 record_ids=${record_ids//\"/}
 nslookup_result=$(nslookup -query="$ali_ddns_ip_type" "$ali_ddns_name" "$dns_server" 2>&1)
 ddns_ip_raw=$(echo "$nslookup_result" | grep "Address" | grep -v "#53" | grep -v ":53" | awk '{print $2}')
-echo "ddns_ip_raw = $ddns_ip_raw"
-echo "处理DNS查询结果..."
+log_message "ddns_ip_raw = $ddns_ip_raw"
+log_message "处理DNS查询结果..."
 if [ -z "$ddns_ip_raw" ]; then
-    echo "DNS查询未返回有效结果，设置默认值"
+    log_message "DNS查询未返回有效结果，设置默认值"
     ddns_ip_raw="0.0.0.0"
 fi
 # 检查是否返回了多个IP地址
 ddns_ip_count=$(echo "$ddns_ip_raw" | grep -v "^$" | wc -l)
 if [ $ddns_ip_count -gt 1 ]; then
-    echo "检测到多个DDNS IP地址 ($ddns_ip_count 个)，先删除所有记录再新增"
+    log_message "检测到多个DDNS IP地址 ($ddns_ip_count 个)，先删除所有记录再新增"
     # 删除所有现有记录
     record_array=($record_ids)
     for record_id in "${record_array[@]}"
@@ -228,12 +244,12 @@ if [ $ddns_ip_count -gt 1 ]; then
     ali_ddns_record_info=$(query_record_id)
     record_id_num=0
     ddns_ip="0.0.0.0"
-    echo "ddns_ip1 = $ddns_ip"
+    log_message "ddns_ip1 = $ddns_ip"
 else
     # 单个IP情况，正常处理record_id
     if [ $((record_id_num)) -gt 1 ]; then
         # 如果记录数大于1，也删除所有记录
-        echo "检测到多个DDNS记录 ($record_id_num 个)，删除所有记录"
+        log_message "检测到多个DDNS记录 ($record_id_num 个)，删除所有记录"
         record_array=($record_ids)
         for record_id in "${record_array[@]}"
         do
@@ -250,10 +266,10 @@ else
         ali_ddns_record_info=$(query_record_id)
         record_id_num=0
         ddns_ip="0.0.0.0"
-        echo "ddns_ip2 = $ddns_ip"
+        log_message "ddns_ip2 = $ddns_ip"
     else
         # 正常情况，获取单个record_id
-        echo "处理正常情况"
+        log_message "处理正常情况"
         ali_ddns_record_id=$(echo "$ali_ddns_record_info" | get_record_id)
         if [ "$ali_ddns_ip_type" = 'A' ]; then
             ali_ddns_ipv4_record_id=$ali_ddns_record_id
@@ -261,81 +277,81 @@ else
             ali_ddns_ipv6_record_id=$ali_ddns_record_id
         fi
         ddns_ip=$(echo "$ddns_ip_raw" | head -n 1)
-        echo "ddns_ip3 = $ddns_ip"
+        log_message "ddns_ip3 = $ddns_ip"
     fi
 fi
 if [ "$ali_ddns_ip_type" = 'A' ]
 then
-    echo "ddns是IPv4类型"
+    log_message "ddns是IPv4类型"
     machine_ip=$(getMachine_IPv4)
     if [ "$machine_ip" = "" ]
     then
         machine_ip=$(getMachine_IPv42)
     fi
-    echo "本机IP是$machine_ip"
+    log_message "本机IP是$machine_ip"
     ali_ddns_record_id=$ali_ddns_ipv4_record_id
     exist_local=$(ip addr show pppoe-wan | grep "scope global pppoe-wan" | grep "$machine_ip"| wc -l)
     exist_ddns=$(echo "$ddns_ip" | grep "$machine_ip"| wc -l)
     exist_ddns_local=$(ip addr show pppoe-wan | grep "scope global pppoe-wan" | grep "$ddns_ip"| wc -l)
 else
-    echo "ddns是IPv6类型"
+    log_message "ddns是IPv6类型"
     machine_ip=$(getMachine_IPv6)
     if [ "$machine_ip" = "" ]
     then
         machine_ip=$(getMachine_IPv62)
     fi
-    echo "本机IP是$machine_ip"
+    log_message "本机IP是$machine_ip"
     ali_ddns_record_id=$ali_ddns_ipv6_record_id
     exist_local=$(ip addr show br-lan | grep "scope global dynamic noprefixroute" | grep "$machine_ip"| wc -l)
     exist_ddns=$(echo "$ddns_ip" | grep "$machine_ip"| wc -l)
     exist_ddns_local=$(ip addr show br-lan | grep "scope global dynamic noprefixroute" | grep "$ddns_ip"| wc -l)
 fi
-echo "exist_ddns_local = $exist_ddns_local"
-echo "exist_local = $exist_local"
-echo "exist_ddns = $exist_ddns"
-echo "开始检查退出条件..."
+log_message "exist_ddns_local = $exist_ddns_local"
+log_message "exist_local = $exist_local"
+log_message "exist_ddns = $exist_ddns"
+log_message "开始检查退出条件..."
 if [ -z "$machine_ip" ]
 then
-    echo "网站查询到的本机IP是空的！"
+    log_message "网站查询到的本机IP是空的！"
     exit 0
 fi
 if [ $((exist_ddns)) -gt 0 ]
 then
-    echo "网站查询到的本机IP已在DDNS表里，跳过"
+    log_message "网站查询到的本机IP已在DDNS表里，跳过"
     exit 1
 else
     if [ $((exist_ddns_local)) -gt 0 ] && [ -n "$ddns_ip" ]
     then
-        echo "网站查询到的解析IP在物理IP中，跳过"
+        log_message "网站查询到的解析IP在物理IP中，跳过"
         exit 1
     fi
 fi
 if [ $((exist_local)) -eq 0 ]
 then
-    echo "物理IP中没有网站查询到的本机IP，跳过"
+    log_message "物理IP中没有网站查询到的本机IP，跳过"
     exit 1
 fi
 txt_ip=$(get_temp_ip)
-echo "txt_ip = $txt_ip"
+log_message "txt_ip = $txt_ip"
 if [ "$machine_ip" = "$txt_ip" ] && [ "$machine_ip" = "$ddns_ip" ]
 then
-    echo "网站查询到的本机IP和上次记录IP一致，跳过"
+    log_message "网站查询到的本机IP和上次记录IP一致，跳过"
     exit 1
 else
     set_temp_ip
-    echo "设置本地缓存IP完成"
+    log_message "设置本地缓存IP完成"
 fi
-echo "开始操作阿里云DDNS解析"
+log_message "开始操作阿里云DDNS解析"
 
 #add support */%2A and @/%40 record
 
 if [ -z "$ali_ddns_record_id" ]
 then
-    echo "开始新增解析记录"
+    log_message "开始新增解析记录"
     ali_ddns_record_id=$(add_record | get_record_id)
     if [ -z "$ali_ddns_record_id" ]
     then
-        echo "ali_ddns_record_id is empty."
+        log_message "ali_ddns_record_id is empty."
     else
         if [ "$ali_ddns_ip_type" = 'A' ]
         then
@@ -343,10 +359,10 @@ then
         else
             ali_ddns_ipv6_record_id=$ali_ddns_record_id
         fi
-        echo "added record id is:" "$ali_ddns_record_id"
+        log_message "added record id is:" "$ali_ddns_record_id"
     fi
 else
-    echo "开始修改解析记录"
+    log_message "开始修改解析记录"
     update_record "$ali_ddns_record_id"
-    echo "updated record id is:" "$ali_ddns_record_id"
+    log_message "updated record id is:" "$ali_ddns_record_id"
 fi
