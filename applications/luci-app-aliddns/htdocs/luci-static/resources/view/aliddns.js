@@ -49,6 +49,12 @@ return view.extend({
         o.default = ":45678/sv/mail";
         o.rmempty = false;
 
+        o = s.option(form.Value, "CronStart", _("Start Minute"),
+            _("Set the starting minute for crontab task cycling, range 0-59"));
+        o.default = "0";
+        o.rmempty = false;
+        o.datatype = "range(0,59)";
+
         // 域名配置部分
         s = m.section(form.TypedSection, 'domain', _('Domain Configurations'));
         s.anonymous = false;

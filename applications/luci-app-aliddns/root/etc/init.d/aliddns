@@ -67,7 +67,9 @@ start() {
 	crontab -l 2>/dev/null > $temp_file
 
 	if ! grep -q "\*/5.*$RUN_SCRIPT" $temp_file; then
-		echo "*/5 * * * * /bin/bash $RUN_SCRIPT" >> $temp_file
+		config_get CronStart "settings" CronStart
+		[ -z "$CronStart" ] && CronStart=0
+		echo "${CronStart}/5 * * * * /bin/bash $RUN_SCRIPT" >> $temp_file
 	fi
 
 	if ! grep -q "\*/5.*/usr/nginx/checkpppoe.sh" $temp_file; then

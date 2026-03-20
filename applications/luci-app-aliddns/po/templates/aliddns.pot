@@ -34,6 +34,12 @@ msgstr ""
 msgid "Callback URL for notifications."
 msgstr ""
 
+msgid "Start Minute"
+msgstr ""
+
+msgid "Set the starting minute for crontab task cycling, range 0-59"
+msgstr ""
+
 msgid "Domain Configurations"
 msgstr ""
 

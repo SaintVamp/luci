@@ -34,6 +34,12 @@ msgstr "邮件通知API"
 msgid "Callback URL for notifications."
 msgstr "输入邮件通知的API地址"
 
+msgid "Start Minute"
+msgstr "任务起始分钟"
+
+msgid "Set the starting minute for crontab task cycling, range 0-59"
+msgstr "设置Crontab任务循环执行的起始分钟，取值范围 0-59"
+
 msgid "Domain Configurations"
 msgstr "域名配置"
 

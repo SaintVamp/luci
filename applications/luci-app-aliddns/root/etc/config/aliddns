@@ -4,6 +4,7 @@ config global 'settings'
 	option TTL '600'
 	option DnsServer 'dns23.hichina.com'
 	option UrlName ':45678/sv/mail'
+	option CronStart '0'
 
 config domain 'domain1'
 	option Subdomain '404'
