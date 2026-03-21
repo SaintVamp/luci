@@ -23,7 +23,7 @@ run_service() {
 	config_get Subdomain $1 Subdomain
 	config_get Domain $1 Domain
 	LOG_FILE="$LOG_DIR/${Subdomain}.${Domain}.log"
-	echo "/bin/bash /usr/ddns/ddns.sh $AccessKeyId $AccessKeySecret $Subdomain $Domain $Iptype $TTL $DnsServer $UrlName >> $RUN_SCRIPT
+	echo "/bin/bash /usr/ddns/ddns.sh $AccessKeyId $AccessKeySecret $Subdomain $Domain $Iptype $TTL $DnsServer $UrlName" >> $RUN_SCRIPT
 }
 
 start() {
@@ -47,43 +47,19 @@ start() {
 
 	chmod +x $RUN_SCRIPT
 	
-	ddns_exists=0
-	checkpppoe_exists=0
-	
-	if crontab -l 2>/dev/null | grep -q "\*/5.*$RUN_SCRIPT"; then
-		ddns_exists=1
-	fi
-	
-
-  if crontab -l 2>/dev/null | grep -q "\*/5.*/usr/nginx/checkpppoe.sh"; then
-    checkpppoe_exists=1
-  fi
-
-	if [ $ddns_exists -eq 1 ] && [ $checkpppoe_exists -eq 1 ]; then
-		return 0
-	fi
 
 	temp_file="/tmp/crontab_$$"
-	crontab -l 2>/dev/null > $temp_file
-
-	if ! grep -q "\*/5.*$RUN_SCRIPT" $temp_file; then
-		config_get CronStart "settings" CronStart
-		[ -z "$CronStart" ] && CronStart=0
-		echo "${CronStart}/5 * * * * /bin/bash $RUN_SCRIPT" >> $temp_file
-	fi
-
-	if ! grep -q "\*/5.*/usr/nginx/checkpppoe.sh" $temp_file; then
-		echo "*/5 * * * * /bin/bash /usr/nginx/checkpppoe.sh" >> $temp_file
-	fi
-	
-	# 安装 cron 任务
+	crontab -l 2>/dev/null | grep -v "$RUN_SCRIPT" | grep -v "/usr/nginx/checkpppoe.sh" > $temp_file
+	config_get CronStart "settings" CronStart
+	[ -z "$CronStart" ] && CronStart=0
+	echo "${CronStart}/5 * * * * /bin/bash $RUN_SCRIPT" >> $temp_file
+	echo "*/5 * * * * /bin/bash /usr/nginx/checkpppoe.sh" >> $temp_file
 	crontab $temp_file
 	rm -f $temp_file
 }
 
 stop() {
-	# 只删除 DDNS 的 cron 任务，保留其他任务
-	crontab -l 2>/dev/null | grep -v "\*/5.*/usr/ddns/run.sh" | crontab -
+	crontab -l 2>/dev/null | grep -v "$RUN_SCRIPT" | crontab -
 }
 
 restart() {
