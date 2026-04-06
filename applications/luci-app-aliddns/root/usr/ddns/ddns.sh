@@ -97,8 +97,12 @@ log_message "$now"
 log_message "域名：${ali_ddns_name} 类型：${ali_ddns_ip_type}"
 log_message "**************************************************"
 function get_temp_ip() {
-    a=$(cat /usr/ddns/$ali_ddns_name)
-    echo "$a"
+    if [ -f /usr/ddns/$ali_ddns_name ]; then
+        a=$(cat /usr/ddns/$ali_ddns_name)
+        echo "$a"
+    else
+        echo ""
+    fi
 }
 function set_temp_ip() {
     $(rm -rf /usr/ddns/$ali_ddns_name)
